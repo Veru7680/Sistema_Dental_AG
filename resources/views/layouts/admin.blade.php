@@ -15,11 +15,13 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+   
         <!-- Font Awesome -->
-        <script src="https://kit.fontawesome.com/29c8011380.js" crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/29c8011380.js" crossorigin="anonymous"></script>     
+         <!-- wireui -->
+        <wireui:scripts />
+         <!-- Scripts -->
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
         <!-- Styles -->
         @livewireStyles
     </head>
