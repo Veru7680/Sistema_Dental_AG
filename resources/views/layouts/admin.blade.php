@@ -1,3 +1,8 @@
+@props([
+    'title'=>config('app.name','Laravel'),
+    'breadcrumbs'=>[],
+    ])
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -30,10 +35,14 @@
 
 <div class="p-4 sm:ml-64">
    <div class="mt-14 flex items-center">
-
-
-   {{$slot}}
+    @include('layouts.includes.admin.breadcrumb')
+     @isset($action)
+     <div class="ml-auto">
+        {{$action}}
+     </div>
+     @endisset
    </div>
+   {{$slot}}
 </div>
 
        
