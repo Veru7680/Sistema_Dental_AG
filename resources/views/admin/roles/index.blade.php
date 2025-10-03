@@ -1,5 +1,5 @@
 <x-admin-layout
-title=" " {{-- Aquí cambia el título de la página --}}
+title=" Roles | Dental AG" {{-- Aquí cambia el título de la página --}}
 
 :breadcrumbs="[
     [
@@ -8,7 +8,7 @@ title=" " {{-- Aquí cambia el título de la página --}}
     ],
 
     [
-        'name'=>'prueba',
+        'name'=>'Roles',
     ]
     
     ]"  >
@@ -16,5 +16,5 @@ title=" " {{-- Aquí cambia el título de la página --}}
        prosicion de boton
     </x-slot>
 
-hola desed admin
+
 </x-admin-layout>

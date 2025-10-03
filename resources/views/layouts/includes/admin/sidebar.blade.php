@@ -2,13 +2,20 @@
 $links = [
     [
         'name'   => 'Dashboard',
-        'icon'   => 'fa-solid fa-gauge',
+        'icon'   => 'fa-solid fa-chart-pie',
         'href'   => route('admin.dashboard'),
         'active' => request()->routeIs('admin.dashboard'),
     ],
 
     [
-        'header' => 'administrar paginas'
+        'header' => 'Gestion'
+    ],
+
+    [
+        'name'   => 'Roles y Permisos',
+        'icon'   => 'fa-solid fa-shield-halved',
+        'href'   => route('admin.roles.index'),
+        'active' => request()->routeIs('admin.roles.*'),
     ],
 
     [
