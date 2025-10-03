@@ -9,7 +9,7 @@ title=" Roles | Dental AG" {{-- Aquí cambia el título de la página --}}
 
     [
         'name'=>'Roles',
-        'route'=>route('admin.roles.index'),
+        'href'=>route('admin.roles.index'),
     ],
 
     [

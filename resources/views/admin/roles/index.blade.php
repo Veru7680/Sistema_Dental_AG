@@ -12,8 +12,13 @@ title=" Roles | Dental AG" {{-- Aquí cambia el título de la página --}}
     ]
     
     ]"  >
+
+    @livewire('admin.datatables.role-table')
     <x-slot name="action">
-       prosicion de boton
+      <x-wire-button blue href="{{route('admin.roles.create')}}" >
+    <i class="fa-solid fa-plus"></i>
+    Nuevo
+      </x-wire-button>
     </x-slot>
 
 
