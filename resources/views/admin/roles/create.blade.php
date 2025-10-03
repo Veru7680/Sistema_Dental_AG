@@ -18,9 +18,24 @@ title=" Roles | Dental AG" {{-- Aquí cambia el título de la página --}}
     
     
     ]"  >
-    <x-slot name="action">
-       prosicion de boton
-    </x-slot>
+    <x-wire-card>
+    <form action="{{route('admin.roles.store')}}" method="POST">
+    @csrf 
+    <x-wire-input
+    label="Nombre"
+    name="name"
+    placeholder="Nombre del Rol"
+    value="{{old('name')}}"
+    />
+
+    <div class="flex justify-end mt-4">
+        <x-wire-button type="submit" blue >
+        Guardar
+        </x-wire-button>
+    </div>  
+
+    </form>
+      </x-wire-card>
 
 
 </x-admin-layout>
