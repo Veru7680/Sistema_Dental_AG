@@ -35,11 +35,11 @@ class RoleController extends Controller
 
        Role::create(['name'=> $request->name]);
        session()->flash('swal',[
-        'tittle'=>'Rol creado correctamente',
-        'text'=>'Rol ha sido creado exitosamente',
+        'title'=>'Rol creado correctamente',
+        'text'=>'El Rol ha sido creado exitosamente',
         'icon'=> 'success',
        ]);
-            return redirect()->route('admin.roles.index')->with('success', 'Rol ha sido creado');
+            return redirect()->route('admin.roles.index');
 
             
     }
@@ -66,7 +66,19 @@ class RoleController extends Controller
      */
     public function update(Request $request, Role $role)
     {
-        //
+             $request -> validate([
+        'name'=> 'required|unique:roles,name,' . $role->id,
+       ]);
+
+       $role->update(['name'=> $request->name]);
+       session()->flash('swal',[
+        'title'=>'Rol Actualizado correctamente',
+        'text'=>'El Rol ha sido Actualizado exitosamente',
+        'icon'=> 'success',
+       ]);
+            return redirect()->route('admin.roles.edit', $role);
+
+         
     }
 
     /**

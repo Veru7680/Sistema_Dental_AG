@@ -53,16 +53,12 @@
         @livewireScripts
          <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
     
-        @if(session('swal'))
-<script>
-    Swal.fire({
-        title: "{{ session('swal.title') }}",
-        text: "{{ session('swal.text') }}",
-        icon: "{{ session('swal.icon') }}"
-    });
-</script>
-@endif
+         @if(session('swal'))
 
+         <script>
+            Swal.fire(@json(session('swal')));
+        </script>
+         @endif
     
         </body>
 </html>
