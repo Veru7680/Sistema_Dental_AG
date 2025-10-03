@@ -57,6 +57,16 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
+        if ($role->id <= 4) {
+        session()->flash('swal', [
+            'title' => 'Error',
+            'text'  => 'No puedes editar este Rol',
+            'icon'  => 'error',
+        ]);
+
+        return back();
+
+        }
     return view('admin.roles.edit',compact('role'));
   
     }
@@ -86,6 +96,19 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
+
+        
+ if ($role->id <= 4) {
+        session()->flash('swal', [
+            'title' => 'Error',
+            'text'  => 'No puedes eliminar este Rol',
+            'icon'  => 'error',
+        ]);
+
+        return back();}
+  
+
+
         $roleName = $role->name;
         $role->delete();
         session()->flash('swal',[
