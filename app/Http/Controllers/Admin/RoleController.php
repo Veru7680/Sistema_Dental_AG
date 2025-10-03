@@ -34,7 +34,14 @@ class RoleController extends Controller
        ]);
 
        Role::create(['name'=> $request->name]);
+       session()->flash('swal',[
+        'tittle'=>'Rol creado correctamente',
+        'text'=>'Rol ha sido creado exitosamente',
+        'icon'=> 'success',
+       ]);
             return redirect()->route('admin.roles.index')->with('success', 'Rol ha sido creado');
+
+            
     }
 
     /**

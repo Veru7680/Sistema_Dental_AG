@@ -18,7 +18,10 @@
    
         <!-- Font Awesome -->
         <script src="https://kit.fontawesome.com/29c8011380.js" crossorigin="anonymous"></script>     
-         <!-- wireui -->
+         <!-- Font Awesome -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        
+        <!-- wireui -->
         <wireui:scripts />
          <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -32,25 +35,34 @@
     @include('layouts.includes.admin.sidebar')
 
 
-
-
-
-<div class="p-4 sm:ml-64">
-   <div class="mt-14 flex items-center">
-    @include('layouts.includes.admin.breadcrumb')
-     @isset($action)
-     <div class="ml-auto">
-        {{$action}}
-     </div>
-     @endisset
-   </div>
-   {{$slot}}
-</div>
+    <div class="p-4 sm:ml-64">
+    <div class="mt-14 flex items-center">
+        @include('layouts.includes.admin.breadcrumb')
+        @isset($action)
+        <div class="ml-auto">
+            {{$action}}
+        </div>
+        @endisset
+    </div>
+    {{$slot}}
+    </div>
 
        
         @stack('modals')
 
         @livewireScripts
          <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
-    </body>
+    
+        @if(session('swal'))
+<script>
+    Swal.fire({
+        title: "{{ session('swal.title') }}",
+        text: "{{ session('swal.text') }}",
+        icon: "{{ session('swal.icon') }}"
+    });
+</script>
+@endif
+
+    
+        </body>
 </html>
