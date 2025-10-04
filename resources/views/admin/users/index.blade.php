@@ -20,5 +20,6 @@ title=" Usuarios | Dental AG" {{-- Aquí cambia el título de la página --}}
       </x-wire-button>
     </x-slot>
 
+    @livewire('admin.datatables.user-table')
 
 </x-admin-layout>
