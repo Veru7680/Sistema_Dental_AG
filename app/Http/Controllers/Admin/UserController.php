@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
-//use Spatie\Permission\Models\Users;
+use Spatie\Permission\Models\Role;
 
 
 class UserController extends Controller
@@ -23,7 +23,8 @@ class UserController extends Controller
      */
     public function create()
     {
-    return view('admin.users.create');
+        $roles= Role::all();
+    return view('admin.users.create', compact('roles'));
     }
 
     /**
@@ -31,7 +32,28 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+       $data= $request->validate([
+       'name'     => 'required|string|max:255',
+       'email'    => 'required|string|email|max:255|unique:users',
+       'password' => 'required|string|min:8|confirmed',
+       'ci'       => 'required|string|max:8|unique:users',
+       'phone'    => 'nullable|string|max:15',
+       'address'  => 'nullable|string|max:255',
+       'role_id'  => 'required|exists:roles,id',
+
+       ]);
+
+       $user= User::create($data);
+       $user->roles()->attach($data['role_id']);
+
+       session()->flash('swal',[
+        'title'=>'Usuario creado correctamente',
+        'text'=>'El Usuario ha sido creado exitosamente',
+        'icon'=> 'success',
+
+       ]);
+
+       return redirect()->route('admin.users.index');
     }
 
     /**
