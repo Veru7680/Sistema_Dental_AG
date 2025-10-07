@@ -84,7 +84,9 @@ title=" Usuarios | Dental AG" {{-- Aquí cambia el título de la página --}}
             />
 
 
-            <x-wire-native-select name="role_id">
+            <x-wire-native-select 
+            label="Rol"
+            name="role_id">
 
                 <option value="">
                 Seleccione un rol
