@@ -19,6 +19,6 @@ title=" Pacientes | Dental AG" {{-- Aquí cambia el título de la página --}}
     
     ]"  >
 
- 
+
 
 </x-admin-layout>

@@ -13,6 +13,6 @@ title=" Pacientes | Dental AG" {{-- Aquí cambia el título de la página --}}
     
     ]"  >
 
- 
+  @livewire('admin.datatables.patient-table')
 
 </x-admin-layout>
