@@ -55,7 +55,24 @@ class PatientController extends Controller
      */
     public function update(Request $request, Patient $patient)
     {
-        //
+       $data = $request->validate([
+    'allergias' => 'nullable|string|max:255',
+    'chronic_conditions' => 'nullable|string|max:255',
+    'observations' => 'nullable|string|max:255',
+    'emergency_contact_name' =>'nullable|string|max:255',
+    'emergency_contact_phone' =>'nullable|string|max:255',
+    'emergency_contact_relationship' =>'nullable|string|max:255'
+
+        ]);
+
+    session()->flash('swal',[
+        'icon'=>'success',
+        'title'=>'Paciente Actualizado',
+        'text'=>'Los datos de paciente fueron actualizados correctamente',
+    ]);
+
+    $patient->update($data);
+    return redirect()->route('admin.patients.edit', $patient);
     }
 
     /**
