@@ -35,6 +35,16 @@ class PatientTable extends DataTableComponent
                 ->sortable(),
             Column::make("Telefono", "user.phone")
                 ->sortable(), 
+                Column::make("Estado", "active")
+                ->format(function ($value, $row) {
+                    if ($row->active) {
+                        return '<span class="bg-green-100 text-green-800 font-bold px-2 py-1 rounded">Activo</span>';
+                    } else {
+                        return '<span class="bg-red-100 text-red-800 font-bold px-2 py-1 rounded">Inactivo</span>';
+                    }
+                })
+                ->html()
+                ->sortable(),
             Column::make("Acciones")
                 ->label(function($row){
                 return view('admin.patients.actions',
