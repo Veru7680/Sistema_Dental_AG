@@ -14,6 +14,7 @@ Route::get ('/', function(){
 //gestion de Roles
 Route::resource('roles', RoleController::class);
 Route::resource('users', UserController::class);
-Route::resource('patients', PatientController::class);
+Route::resource('patients', PatientController::class)
+->only(['index', 'edit', 'update']);
 Route::resource('doctors', DoctorController::class)
-->except(['create', 'store', 'show']);
+->only(['index', 'edit', 'update']);

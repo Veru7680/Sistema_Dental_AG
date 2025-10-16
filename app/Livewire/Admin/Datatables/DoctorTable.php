@@ -12,7 +12,7 @@ class DoctorTable extends DataTableComponent
     public function builder(): Builder
     {
     return Doctor::query()
-    ->with('user');
+    ->with(['user', 'speciality']);
     }
 
     public function configure(): void
@@ -40,7 +40,7 @@ class DoctorTable extends DataTableComponent
 
         Column::make("Especialidad ", "speciality.name")
            ->format(function ($value){
-            return $value?->name ?: 'N/A';
+            return $value ?: 'N/A';
            })
             ->sortable(),
 

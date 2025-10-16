@@ -5,12 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Doctor;
 use Illuminate\Http\Request;
+use App\Models\Speciality;
+
 
 class DoctorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         return view('admin.doctors.index');
@@ -19,22 +18,27 @@ class DoctorController extends Controller
    
     public function edit(Doctor $doctor)
     {
-        return view('admin.doctors.edit', compact('doctor'));
+        $specialities= Speciality::all();
+        return view('admin.doctors.edit', compact('doctor', 'specialities'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+  
     public function update(Request $request, Doctor $doctor)
     {
+        
+       $data= $request->validate([
+            'speciality_id'=> 'nullable|exists:specialities,id',
+        ]);
+
+        $doctor->update($data);
+
+        session()->flash('swal',[
+        'icon'=>'success',
+        'title'=>'Doctor Actualizado',
+        'text'=>'Los datos del Doctor fueron actualizados correctamente',
+    ]);
+       return redirect()->route('admin.doctors.edit',$doctor);
 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Doctor $doctor)
-    {
-        //
-    }
 }
