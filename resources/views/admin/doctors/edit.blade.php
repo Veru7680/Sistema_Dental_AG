@@ -9,10 +9,16 @@ title=" Doctores | Dental AG" {{-- Aquí cambia el título de la página --}}
 
     [
         'name'=>'Doctores',
-        'href'=>route('admin.doctors.index');
+        'href'=>route('admin.doctors.index'),
     ],
     [
         'name'=>'Editar'
     ]
     
     ]"  >
+
+
+
+
+  
+</x-admin-layout>
