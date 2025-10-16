@@ -39,7 +39,10 @@ class DoctorController extends Controller
         'text'=>'Los datos del Doctor fueron actualizados correctamente',
     ]);
        return redirect()->route('admin.doctors.edit',$doctor);
+    }
 
+    public function schedules(Doctor $doctor){
+        return view('admin.doctors.schedules', compact('doctor'));
     }
 
 }
