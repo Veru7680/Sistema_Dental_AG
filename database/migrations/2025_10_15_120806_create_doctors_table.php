@@ -24,6 +24,9 @@ return new class extends Migration
             ->constrained()
             ->onDelete('set null');
 
+            $table->boolean('active')
+            ->default(true); 
+
             $table->timestamps();
         });
     }

@@ -111,9 +111,34 @@ title=" Pacientes | Dental AG" {{-- Aquí cambia el título de la página --}}
                                         <span class="text-gray-900 text-sm ml-1">
                                             {{$patient->user->address}}
                                         </span>                             
-                                        </div>
-                            </div>
-                    </x-tab-content>
+                                    </div>
+
+                                    <div class="flex flex-col">
+                                        <span class="text-gray-500 font-semibold text-sm">
+                                            Estado:
+                                        </span>
+                                        <x-wire-native-select 
+                                   
+                                        name="active"
+                                        >
+                                        <option value="">
+                                            Selecciona una Especialidad
+                                        </option>
+                                            <option value="1" @selected(old('active', $patient->active) == 1)>
+                                                Activo
+                                            </option>
+                                            <option value="0" @selected(old('active', $patient->active) == 0)>
+                                                Inactivo
+                                            </option>
+                                        </x-wire-native-select>
+                                    </div>
+
+                        </div>
+                    
+                       
+                                
+                        
+                        </x-tab-content>
 
                      {{-- Antecedentes --}}
                     <x-tab-content tab="antecedentes">                            
@@ -167,10 +192,14 @@ title=" Pacientes | Dental AG" {{-- Aquí cambia el título de la página --}}
                                         value="{{old('emergency_contact_relationship', $patient->emergency_contact_relationship)}}"/>
 
                             </div>
-                    </x-tab-content> 
 
-                 </div>     
+                            
+                    </x-tab-content>  
+
+                 </div>
+                 
             </x-tabs>
+
         </x-wire-card>
     </form>
 </x-admin-layout>

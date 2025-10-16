@@ -28,6 +28,7 @@ class DoctorController extends Controller
         
        $data= $request->validate([
             'speciality_id'=> 'nullable|exists:specialities,id',
+            'active'=> 'boolean',
         ]);
 
         $doctor->update($data);

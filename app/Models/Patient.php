@@ -15,6 +15,7 @@ class Patient extends Model
         'emergency_contact_name',
         'emergency_contact_phone',
         'emergency_contact_relationship',
+        'active',
     ];
 
 

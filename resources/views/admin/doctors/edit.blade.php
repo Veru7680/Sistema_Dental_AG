@@ -55,8 +55,7 @@ title=" Doctores | Dental AG" {{-- Aquí cambia el título de la página --}}
         <x-wire-card class="mb-6">
             <div class="space-y-4">
 
-                <x-wire-native-select
-
+            <x-wire-native-select
                 label="Especialidad"
                 name="speciality_id"  
                 >
@@ -72,8 +71,22 @@ title=" Doctores | Dental AG" {{-- Aquí cambia el título de la página --}}
                         </option>
 
                     @endforeach
-                </x-wire-native-select>
+            </x-wire-native-select>
 
+
+            <x-wire-native-select 
+                    label="Estado"
+                    name="active">
+                    <option value="">
+                    Selecciona una Especialidad
+                </option>
+                         <option value="1" @selected(old('active', $doctor->active) == 1)>
+                                                Activo
+                        </option>
+                        <option value="0" @selected(old('active', $doctor->active) == 0)>
+                                                Inactivo
+                        </option>
+            </x-wire-native-select>  
 
 
             </div>
