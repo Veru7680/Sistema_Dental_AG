@@ -13,5 +13,6 @@ title=" Doctores | Dental AG" {{-- Aquí cambia el título de la página --}}
     
     ]"  >
 
+  @livewire('admin.datatables.doctor-table')
 
 </x-admin-layout>

@@ -8,7 +8,7 @@ class Doctor extends Model
 {
    protected $fillable=[
     'user_is',
-    'specialtty_id',  
+    'speciality_id',  
    ];
    //relaciones
    public function user(){
