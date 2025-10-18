@@ -27,25 +27,27 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         <!-- Styles -->
         @livewireStyles
+
+        @stack('css')
     </head>
     <body class="font-sans antialiased bg-gray-50">
        
-    @include('layouts.includes.admin.navigation')
+        @include('layouts.includes.admin.navigation')
 
-    @include('layouts.includes.admin.sidebar')
+        @include('layouts.includes.admin.sidebar')
 
 
-    <div class="p-4 sm:ml-64">
-    <div class="mt-14 flex items-center">
-        @include('layouts.includes.admin.breadcrumb')
-        @isset($action)
-        <div class="ml-auto">
-            {{$action}}
+        <div class="p-4 sm:ml-64">
+        <div class="mt-14 flex items-center">
+            @include('layouts.includes.admin.breadcrumb')
+            @isset($action)
+            <div class="ml-auto">
+                {{$action}}
+            </div>
+            @endisset
         </div>
-        @endisset
-    </div>
-    {{$slot}}
-    </div>
+        {{$slot}}
+        </div>
 
        
         @stack('modals')
@@ -55,39 +57,41 @@
     
          @if(session('swal'))
 
-         <script>
+        <script>
             Swal.fire(@json(session('swal')));
         </script>
          @endif
-        <script>
-            forms= document.querySelectorAll('.delete-form');
+            <script>
+                forms= document.querySelectorAll('.delete-form');
 
-            forms.forEach(form=>{
-                form.addEventListener('submit',
-                    function(e){
-                    e.preventDefault();
+                forms.forEach(form=>{
+                    form.addEventListener('submit',
+                        function(e){
+                        e.preventDefault();
 
-                Swal.fire({
-                title: "Estas seguro?",
-                text: "No podras revertir esto!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Si, eliminar!",
-                cancelButtonText:"Cancelar"
-                }).then((result) => {
-                if (result.isConfirmed) {
-                    form.submit();
-                }
-                });
-
-
-
+                    Swal.fire({
+                    title: "Estas seguro?",
+                    text: "No podras revertir esto!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Si, eliminar!",
+                    cancelButtonText:"Cancelar"
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
                     }
-                );
+                    });
 
-            });
-        </script>
-        </body>
+
+
+                        }
+                    );
+
+                });
+            </script>
+     @stack('js')
+
+    </body>
 </html>

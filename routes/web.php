@@ -17,3 +17,8 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 });
+
+Route::get('/prueba', function(){
+    $schedule= \App\Models\Schedule::find(1);
+    return $schedule->start_time->format('H:i:s');
+})->name('prueba');
