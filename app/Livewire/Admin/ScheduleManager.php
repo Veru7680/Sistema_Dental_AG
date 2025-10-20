@@ -33,8 +33,7 @@ public $intervals;
             Carbon::createFromTimeString('08:00:00'),
             '1 hour',
             Carbon::createFromTimeString('19:00:00'),
-
-            );
+            )->excludeEndDate();
         }
 
     public function mount()
