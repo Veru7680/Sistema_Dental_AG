@@ -3,10 +3,12 @@
 namespace App\Livewire\Admin;
 
 use Livewire\Component;
-use App\Models\Doctor;          
+use App\Models\Doctor; 
+use App\Models\Schedule;
 use Carbon\Carbon;            
 use Carbon\CarbonPeriod;             
-use Livewire\Attributes\Computed;    
+use Livewire\Attributes\Computed;   
+ 
 
 class ScheduleManager extends Component
 {
@@ -68,8 +70,32 @@ public $intervals;
     }
 
 
-    public function save(){
-        dd($this->schedule);
+    public function save()
+    {
+        $this->doctor->schedules()->delete();
+
+        foreach($this->schedule as $day_of_week => $intervals)
+        {
+            foreach($intervals as $start_time => $isChecked){
+                if($isChecked){ 
+                        Schedule::create([
+                            'doctor_id'=> $this->doctor->id,
+                            'day_of_week'=> $day_of_week,
+                            'start_time'=> $start_time,
+                            'end_time'=>Carbon::createFromTimeString($start_time)
+                            ->addMinutes($this->apointment_duration)
+                            ->format('H:i:s'),
+
+                            ]);
+                    } 
+            }
+        }
+
+        $this->dispatch('swal',[
+            'icon'=>'success',
+            'title'=>'Hoarario Actualizado',
+            'text'=>'El horario del Doctor ha Siso actualizado',
+        ]);
     }
 
 
