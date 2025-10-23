@@ -14,37 +14,38 @@ class ScheduleManager extends Component
 {
 public Doctor $doctor;
 public $schedule=[];
+public $days=[];
 
-public $days=[
-    1=>'Lunes',
-    2=>'Martes',
-    3=>'Miercoles',
-    4=>'Jueves',
-    5=>'Viernes',
-    6=>'Sabado',
-    0=>'Domingo',
-];
+public $apointment_duration;
+public $start_time;
+public $end_time;
 
-public $apointment_duration=15;
 public $intervals;
 
 #[Computed()]
-    public function hourBlocks()
+        public function hourBlocks()
         {
             return CarbonPeriod::create(
-            Carbon::createFromTimeString('08:00:00'),
+            Carbon::createFromTimeString($this->start_time),
             '1 hour',
-            Carbon::createFromTimeString('19:00:00'),
+            Carbon::createFromTimeString($this->end_time)
             )->excludeEndDate();
         }
 
-    public function mount()
+    
+        public function mount()
         {
+        $this->days = config('schedule.days');
+        $this->apointment_duration = config('schedule.appointment_duration', 15);
+        $this->start_time = config('schedule.start_time');
+        $this->end_time = config('schedule.end_time');
+
         $this->intervals=60 / $this->apointment_duration;
         $this->initializeSchedule();
         }
 
-    public function initializeSchedule(){
+    
+        public function initializeSchedule(){
         $schedules= $this->doctor->schedules;
         foreach ($this->hourBlocks as $hourBlock){
             $period =CarbonPeriod::create(
@@ -54,9 +55,7 @@ public $intervals;
             );
 
            foreach ($period as $time){
-
-
-                foreach ($this ->days as $index=>$day){
+                foreach ($this->days as $index =>$day){
                     $this->schedule[$index][$time->format('H:i:s')]= $schedules->contains(function($schedule) use ($index, $time){
                        return $schedule->day_of_week == $index && $schedule->start_time->format('H:i:s')==$time->format('H:i:s');
                             
@@ -79,15 +78,11 @@ public $intervals;
             foreach($intervals as $start_time => $isChecked){
                 if($isChecked){ 
                         Schedule::create([
-                            'doctor_id'=> $this->doctor->id,
-                            'day_of_week'=> $day_of_week,
-                            'start_time'=> $start_time,
-                            'end_time'=>Carbon::createFromTimeString($start_time)
-                            ->addMinutes($this->apointment_duration)
-                            ->format('H:i:s'),
-
+                            'doctor_id' => $this->doctor->id,
+                            'day_of_week' => $day_of_week,
+                            'start_time' => $start_time,
                             ]);
-                    } 
+                            } 
             }
         }
 
