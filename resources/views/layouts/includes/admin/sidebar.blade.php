@@ -40,6 +40,13 @@ $links = [
     ],
 
     [
+        'name'   => 'Citas Medicas',
+        'icon'   => 'fa-solid fa-calendar-check',
+        'href'   => route('admin.appointments.index'),
+        'active' => request()->routeIs('admin.appointments.*'),
+    ],
+
+    [
         'name'   => 'Dashboard',
         'icon'   => 'fa-solid fa-gauge',
         'href'   => route('admin.dashboard'),
