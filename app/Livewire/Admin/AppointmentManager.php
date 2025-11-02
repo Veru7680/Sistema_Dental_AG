@@ -1,0 +1,64 @@
+<?php
+
+namespace App\Livewire\Admin;
+
+use Livewire\Component;
+use Livewire\Attributes\Computed;
+use Carbon\Carbon;            
+use Carbon\CarbonPeriod;   
+use App\Models\Speciality;
+use Illuminate\Validation\Rule;
+use App\Services\AppointmentService;
+
+
+class AppointmentManager extends Component
+{
+    public $search = [
+        'date' => '',
+        'hour' => '',
+        'speciality_id' => '',
+
+    ];
+
+    public $specialities = [];
+
+    public function mount()
+    {
+        $this->specialities = Speciality::all();
+        $this->search['date'] = now()->hour >= 19 //hora antes de cambiae horario osea acaba a klas 7pm en ejemplo estaa en 12
+            ? now()->addDay()->format('Y-m-d')
+            : now()->format('Y-m-d');
+    }
+
+    #[Computed()]
+        public function hourBlocks()
+            {
+                return CarbonPeriod::create(
+                Carbon::createFromTimeString(config('schedule.start_time')),
+                '1 hour',
+                Carbon::createFromTimeString(config('schedule.end_time'))
+                )->excludeEndDate();
+            }
+
+        public function searchAvailability(AppointmentService $service){
+                $this->validate([
+                    'search.date' => 'required|date|after_or_equal:today',
+                    'search.hour' => [
+                        'required',
+                        'date_format:H:i:s',
+                       Rule::when($this->search['date'] === now()->format('Y-m-d'),[
+                        'after_or_equal:' . now()->format('H:i:s')
+                       ]),
+                    ],
+                    //'search.specialist_id' => 'required|exists:specialists,id',
+                ]);
+
+                //Buscar disponibilidad
+               $availability = $service->searchAvailability(...$this->search);
+        }
+
+     public function render()
+    {
+        return view('livewire.admin.appointment-manager');
+    }
+}

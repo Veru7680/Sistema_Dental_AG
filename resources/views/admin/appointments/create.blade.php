@@ -10,7 +10,7 @@ title=" Citas | Dental AG" {{-- Aquí cambia el título de la página --}}
     [
         'name'=>'Citas',
         'href'=> route('admin.appointments.index'),
-    ]
+    ],
 
     [
         'name'=> 'Nuevo'
@@ -18,5 +18,5 @@ title=" Citas | Dental AG" {{-- Aquí cambia el título de la página --}}
     
     ]"  >
 
-
+@livewire('admin.appointment-manager')
 </x-admin-layout>
