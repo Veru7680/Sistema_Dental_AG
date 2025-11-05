@@ -37,6 +37,24 @@ class AppointmentService
      ])
      ->get();
      
-     dd($doctors->toArray());
+     return $this->processResults($doctors);
+     
+  }
+
+  public function processResults($doctors)
+  {
+    return $doctors->mapWithKeys(function($doctor){
+      return [
+        $doctor->id => [
+          'doctor' => $doctor,
+        'schedules' => $doctor->schedules->map(function($schedule){
+          return [
+            'start_time' => $schedule->start_time->format('H:i:s'),   
+          ];
+        })->toArray(),
+        ]
+      ];
+    });
+
   }
 }
