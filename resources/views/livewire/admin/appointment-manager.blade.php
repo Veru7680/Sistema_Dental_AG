@@ -151,12 +151,46 @@
                     {
                         newSchedules = [...currentSchedules, schedule];
                     }
-                    this.selectedSchedules = {
-                        doctor_id: doctorId,
-                        schedules: newSchedules
-                    };
-                  
+
+                    if (this.isContiguos(newSchedules))
+                    {
+                        this.selectedSchedules = {
+                            doctor_id: doctorId,
+                            schedules: newSchedules
+                        };
+                    }else{
+                        this.selectedSchedules = {
+                            doctor_id: doctorId,
+                            schedules: [schedule]
+                        };
+                    }             
+                },
+                isContiguos(schedules)
+                {
+                    if(schedules.length < 2){ 
+                        return true; }
+                 let sortedSchedules = schedules.sort();
+
+                 for(let i = 0; i < sortedSchedules.length -1; i++){
+                    let currentTime = sortedSchedules[i];
+                    let nextTime = sortedSchedules[i +1];
+
+                    if(this.calculateNextTime (currentTime) !== nextTime){
+                        return false;
+                    }
                 }
+                return true;
+            },
+
+            calculateNextTime(time){
+                let date = new Date(`1970-01-01T${time}`);
+
+                let duration = parseInt( "{{config('schedule.appointment_duration')}}" , 10);
+                
+                date.setMinutes(date.getMinutes() + duration);
+                return date.toTimeString().split(' ')[0];
+            }
+
             }
         }
      </script>
