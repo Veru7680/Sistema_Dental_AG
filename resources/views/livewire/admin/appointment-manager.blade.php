@@ -62,8 +62,8 @@
 
     @if ($appointment ['date'])
         @if (count($availabilities))
-           <div class="grid lg:grid-cols-3 gap-4 lg:gap-8">
-                <div class="col-span-1 lg:col-span-2 space-y-6">
+           <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-8">
+                <div class="lg:col-span-2 space-y-6">
                     @foreach($availabilities as $availability)
                     <x-wire-card>
                        <div class="flex items-center space-x-4">
@@ -107,9 +107,74 @@
                     @endforeach
                 </div>
 
-                <div class="col-span-1">
-                    @json($selectedSchedules)
+                <div class="lg:col-span-1">
+                    {{-- @json($selectedSchedules) --}}
+                    <x-wire-card>
+                        <p class="text-xl font-semibold mb-4 text-slate-800">
+                            Resumen de la cita
+                        </p>
+                                                
+                        <div class="space-y-3 text-sm">
+                            <div class="flex justify-between">
+                                <span class="font-semibold text-slate-700">
+                                    Doctor:
+                                </span>
+                                <span class="text-slate-500">
+                                    {{ $this->doctorName }}
+                                </span>
+                            </div>
 
+                            <div class="flex justify-between">
+                                <span class="font-semibold text-slate-700">
+                                    Fecha:
+                                </span>
+                                <span class="text-slate-500">
+                                    {{ \Carbon\Carbon::parse($appointment['date'])->format('d/m/Y') }}
+                                </span>
+                            </div>
+
+                            <div class="flex justify-between">
+                                    <span class="font-semibold text-slate-700">
+                                        Horario:
+                                    </span>
+                                    <span class="text-slate-500">
+                                      @if($appointment['duration'])
+                                       {{ $appointment['start_time']}} - {{ $appointment['end_time'] }}
+                                        @else
+                                          Por denifinir
+                                      @endif
+                                    </span>
+                            </div>
+
+                            <div class="flex justify-between">
+                                    <span class="font-semibold text-slate-700">
+                                        Duracion:
+                                    </span>
+                                    <span class="text-slate-500">
+                                     {{ $appointment['duration'] ?: 0 }} minutos
+                                    </span>
+                            </div>
+                        </div>
+
+                        <hr class="my-5">
+                        <div class="space-y-6">
+                            <x-wire-select
+                            label="paciente"
+                            placeholder="Selecciona un paciente"
+                            :async-data="route('api.patients.index')"
+                            wire:model="appointment.patient_id"
+                            option-label="name"
+                            option-value="id"
+                        />
+
+                        <x-wire-textarea wire:model="appointment.reason" />
+                            
+                            
+                            
+
+                        </div>
+
+                    </x-wire-card>
                 </div>
            </div>
 
@@ -182,15 +247,14 @@
                 return true;
             },
 
-            calculateNextTime(time){
-                let date = new Date(`1970-01-01T${time}`);
+                calculateNextTime(time){
+                    let date = new Date(`1970-01-01T${time}`);
 
-                let duration = parseInt( "{{config('schedule.appointment_duration')}}" , 10);
-                
-                date.setMinutes(date.getMinutes() + duration);
-                return date.toTimeString().split(' ')[0];
-            }
-
+                    let duration = parseInt( "{{config('schedule.appointment_duration')}}" , 10);
+                    
+                    date.setMinutes(date.getMinutes() + duration);
+                    return date.toTimeString().split(' ')[0];
+                }
             }
         }
      </script>

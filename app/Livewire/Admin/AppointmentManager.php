@@ -48,6 +48,13 @@ class AppointmentManager extends Component
             : now()->format('Y-m-d');
     }
 
+    public function updated($property, $value)
+    {
+        if($property === 'selectedSchedules') {
+            $this->fillAppointment($value);
+        }
+    }
+
     #[Computed()]
         public function hourBlocks()
             {
@@ -57,8 +64,16 @@ class AppointmentManager extends Component
                 Carbon::createFromTimeString(config('schedule.end_time'))
                 )->excludeEndDate();
             }
+    
+     #[Computed()]
+        public function doctorName(){
+            return $this->appointment['doctor_id']
+            ? $this->availabilities[$this->appointment['doctor_id']]['doctor']->user->name 
+            : 'Por definir';
+        }
 
-        public function searchAvailability(AppointmentService $service){
+        public function searchAvailability(AppointmentService $service)
+        {
                 $this->validate([
                     'search.date' => 'required|date|after_or_equal:today',
                     'search.hour' => [
@@ -75,6 +90,28 @@ class AppointmentManager extends Component
 
                 //Buscar disponibilidad
                $this->availabilities = $service->searchAvailability(...$this->search);
+        }
+
+        public function fillAppointment($selectedSchedules)
+        {
+            $schedules = collect($selectedSchedules['schedules'])
+            ->sort()
+            ->values();
+            if($schedules->count()){
+                $this->appointment['doctor_id'] = $selectedSchedules['doctor_id'];
+                $this->appointment['start_time'] = $schedules->first();
+                $this->appointment['end_time'] = Carbon::parse($schedules->last())->addMinutes(
+                    config('schedule.appointment_duration')
+                )->format('H:i:s');
+                $this->appointment['duration'] = $schedules->count() * config('schedule.appointment_duration');
+                return;
+            } 
+                
+                 $this->appointment['doctor_id'] = ""; 
+                $this->appointment['start_time'] = ""; 
+                  $this->appointment['end_time'] = ""; 
+                  $this->appointment['duration'] = ""; 
+
         }
 
      public function render()
