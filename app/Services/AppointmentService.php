@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Carbon; // Usar Carbon de Laravel
+use Carbon\CarbonPeriod; 
 use App\Models\Doctor;
 
 class AppointmentService
@@ -44,17 +45,36 @@ class AppointmentService
   public function processResults($doctors)
   {
     return $doctors->mapWithKeys(function($doctor){
+      $schedules = $this->getAvailableSchedules($doctor->schedules, $doctor->appointments);
+
       return [
         $doctor->id => [
           'doctor' => $doctor,
-        'schedules' => $doctor->schedules->map(function($schedule){
-          return [
-            'start_time' => $schedule->start_time->format('H:i:s'),   
-          ];
-        })->toArray(),
+        'schedules' => $schedules,
         ]
       ];
     });
+  }
+
+  public function getAvailableSchedules($schedules, $appointments)
+  {
+    return $schedules->map(function($schedule) use ($appointments){
+
+     $isBooked = $appointments->some(function($appointment) use ($schedule){
+        $appointmentPeriod = CarbonPeriod::create(
+          $appointment->start_time,
+          config('schedule.appointment_duration').' minutes',
+          $appointment->end_time
+        )->excludeEndDate();
+       
+        return $appointmentPeriod->contains($schedule->start_time);
+      });
+          return [
+            'start_time' => $schedule->start_time->format('H:i:s'),
+            'disabled' => $isBooked, 
+          ];
+        })->toArray();
 
   }
+  
 }
