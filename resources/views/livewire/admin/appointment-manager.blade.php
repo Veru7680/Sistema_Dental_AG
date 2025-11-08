@@ -167,9 +167,19 @@
                             option-value="id"
                         />
 
-                        <x-wire-textarea wire:model="appointment.reason" />
+                        <x-wire-textarea 
+                        label="Motivo de la cita"
+                        placeholder="Describa el motivo de la cita"
+                        wire:model="appointment.reason" />
                             
-                            
+                         <x-wire-button 
+                         wire:click="save"
+                         spinner="save"
+                         class="w-full">
+                         Confirmar Cita
+
+                         </x-wire-button>
+
                             
 
                         </div>

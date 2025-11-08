@@ -7,6 +7,7 @@ use Livewire\Attributes\Computed;
 use Carbon\Carbon;            
 use Carbon\CarbonPeriod;   
 use App\Models\Speciality;
+use App\Models\Appointment;
 use Illuminate\Validation\Rule;
 use App\Services\AppointmentService;
 
@@ -111,6 +112,32 @@ class AppointmentManager extends Component
                 $this->appointment['start_time'] = ""; 
                   $this->appointment['end_time'] = ""; 
                   $this->appointment['duration'] = ""; 
+
+        }
+
+        public function save()
+        {
+            $this->validate([
+                'appointment.patient_id' => 'required|exists:patients,id',
+                'appointment.doctor_id' => 'required|exists:doctors,id',
+                'appointment.date' => 'required|date|after_or_equal:today',
+                'appointment.start_time' => 'required|date_format:H:i:s',
+                'appointment.end_time' => 'required|date_format:H:i:s|after:appointment.start_time',
+
+                'appointment.reason' => 'nullable|string|max:500',
+            ]);
+
+            Appointment::create($this->appointment);
+            session()->flash('swal', [
+                'icon' => 'success',
+                'title' => 'Cita creada Existosamente',
+                'text' => 'La cita ha sido registrado correctamente.'
+            ]);
+
+            return redirect()->route('admin.appointments.index');
+
+            //Guardar cita
+            //dd($this->appointment);
 
         }
 
