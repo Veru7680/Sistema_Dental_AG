@@ -47,12 +47,19 @@ class AppointmentService
     return $doctors->mapWithKeys(function($doctor){
       $schedules = $this->getAvailableSchedules($doctor->schedules, $doctor->appointments);
 
-      return [
+      /* return [
         $doctor->id => [
           'doctor' => $doctor,
         'schedules' => $schedules,
         ]
-      ];
+      ]; */
+       return $schedules->contains('disabled', false) ? 
+       [ $doctor->id => [
+          'doctor' => $doctor,
+          'schedules' => $schedules,
+        ]
+       ] : [];
+
     });
   }
 
@@ -73,7 +80,7 @@ class AppointmentService
             'start_time' => $schedule->start_time->format('H:i:s'),
             'disabled' => $isBooked, 
           ];
-        })->toArray();
+        });
 
   }
   
