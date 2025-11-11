@@ -18,17 +18,18 @@ class Appointment extends Model
     ];
 
     protected $casts =[
-        'dates' =>'date',
-        'tart_time' =>'datetime',
-        'end_timek' =>'time',
-        'status' => AppointmentEnum::class,
+        'date' => 'date',
+        'start_time' => 'datetime',
+        'end_time' => 'datetime', // Cambiado de 'time' a 'datetime'
+        'status' => 'string',
+       
     ];
 
     public function patient(){
             return $this->belongsTo(Patient::class);
     }
 
-    public function dotor(){
+    public function doctor(){
         return $this->belongsTo(Doctor::class);
     }
 
