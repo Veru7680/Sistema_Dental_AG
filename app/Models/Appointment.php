@@ -25,6 +25,11 @@ class Appointment extends Model
        
     ];
 
+      //relacion uno a uno
+    public function consultation(){
+        return $this->hasOne(Consultation::class);
+    }
+        //relacion inversa
     public function patient(){
             return $this->belongsTo(Patient::class);
     }
@@ -32,6 +37,5 @@ class Appointment extends Model
     public function doctor(){
         return $this->belongsTo(Doctor::class);
     }
-
 
 }
