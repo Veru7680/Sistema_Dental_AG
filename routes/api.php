@@ -14,7 +14,9 @@ Route::get('/patients', function (Request $request) {
             )
             ->when(
                 $request->exists('selected'),
-                fn ($query) => $query->whereIn('id', $request->input('selected', [])),
+                fn ($query) => $query->whereHas('patient', function ($query) use ($request){
+                    $query->whereIn('id', $request->input('selected', []));
+                }),
                 fn ($query) => $query->limit(10)
             )
             ->whereHas('patient')

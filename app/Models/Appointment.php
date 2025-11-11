@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use App\Enums\AppointmentEnum;
 use Illuminate\Database\Eloquent\Model;
 
 class Appointment extends Model
@@ -21,7 +21,7 @@ class Appointment extends Model
         'date' => 'date',
         'start_time' => 'datetime',
         'end_time' => 'datetime', // Cambiado de 'time' a 'datetime'
-        'status' => 'string',
+        'status' => AppointmentEnum::class,
        
     ];
 
