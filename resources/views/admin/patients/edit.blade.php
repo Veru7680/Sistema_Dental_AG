@@ -34,6 +34,10 @@ title=" Pacientes | Dental AG" {{-- Aquí cambia el título de la página --}}
                                 <p class="text-2xl font-bold text-gray-900">
                                     {{$patient->user->name}}
                                 </p>
+
+                                <p class="text-sm font-semibold text-gray-500">
+                                   Ci: {{$patient->user->ci ?? 'N/A'}}
+                                </p>
                             </div>
                 </div>
 
