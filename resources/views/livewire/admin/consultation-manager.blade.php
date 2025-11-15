@@ -17,14 +17,14 @@
                             </div>
                 </div>
 
-                <div class="flex space-x-7 mt-6 lg:mt-0 ">
-                    <x-wire-button outline gray sm x-on:click="$openModal('historyModal')">
+                <div class="lg:flex lg:space-x-3 space-y-5 lg:space-y-0 mt-4 lg:mt-0 ">
+                    <x-wire-button class="w-full lg:w-auto" outline gray sm x-on:click="$openModal('historyModal')">
                         <i class="fa-solid fa-notes-medical"></i>
                         Ver Historia
                     </x-wire-button>
 
 
-                    <x-wire-button outline gray sm>
+                    <x-wire-button class="w-full lg:w-auto" outline gray sm x-on:click="$openModal('previusConsultationsModal')">
                         <i class="fa-solid fa-clock-rotate-left"> </i>
                         Consultas anteriores
                     </x-wire-button>
@@ -41,7 +41,7 @@
                 </x-tab-link>
 
                 <x-tab-link tab="receta">
-                    <i class="fa-solid fa-prescription-botlle-medical me-2"></i>
+                    <i class="fa-solid fa-prescription-bottle-medical me-2"></i>
                         Receta
                 </x-tab-link>
             </x-slot>
@@ -73,7 +73,7 @@
                 <div class="space-y-4">
                     @forelse($form['prescriptions'] as $index => $prescription)
 
-                    <div class="bg-gray-50 p-4 rounded-lg border flex gap-4" 
+                    <div class="bg-gray-50 p-4 rounded-lg border lg:flex gap-4 lg:space-y-4 lg:space-y-0 " 
                      wire:key="prescription-{{$index}}">
 
                       <div class="flex-1">
@@ -84,7 +84,7 @@
                         />
                       </div>
 
-                      <div class="w-32">
+                      <div class="lg:w-32">
                         <x-wire-input 
                         label="Dosis"
                         placeholder="Ej: 1 capsula"
@@ -102,7 +102,7 @@
 
                       </div>
 
-                      <div class="flex-shrink-0 pt-7">
+                      <div class="flex-shrink-0 lg:pt-7">
                         <x-wire-mini-button sm red
                         icon="trash"
                         wire:click="removePrescriptions({{$index}})" 
@@ -144,19 +144,19 @@
     </x-wire-card> 
 
     <x-wire-modal-card 
-    title="Historia Medica del paciente" 
-    name="historyModal"
-    width="5xl">
+        title="Historia Medica del paciente" 
+        name="historyModal"
+        width="5xl">
 
 
-        <div class="grid grid-cols-4 gap-6">
+        <div class="grid lg:grid-cols-4 gap-6">
             <div>
                 <p class="font-medium text-gray-500 mb-1">
                     Alergias:
                 </p>
 
                 <p class="font-semibold text-gray-800">
-                    {{ $patient->allergies ?? 'No registrado' }}
+                    {{ $patient->allergias ?? 'No registrado' }}
                 </p>
             </div>
 
@@ -186,7 +186,7 @@
             <div class="flex justify-end">
                 <a href="{{route('admin.patients.edit', $patient->id)}}"
                 class="font-semibold text-blue-600 hover:text-blue-800"
-                target="_black">
+                target="_blank">
                 Ver / Editar Historia Medica
                 </a>
             </div>
@@ -195,5 +195,55 @@
        
     </x-wire-modal-card>
     
+    <x-wire-modal-card 
+        title="Consultas anteriores" 
+        name="previusConsultationsModal"
+        width="4xl">
 
+        @forelse($previusConsultations as $consultation)
+            <a href="{{ route('admin.appointments.show', $consultation->appointment_id) }}" 
+                class="block p-5 rounded-lg shadow-md border border-gray-200 hover:border-indigo-400 hover:shadow-indigo-100 transition-all duration-200"
+                target="_blank">
+
+                <div class="lg:flex justify-between items-center space-y-2 lg:space-y-0">
+                    <div>
+                        <p class="font-semibold text-gray-800 flex items-center">
+                          <i class="fa solid fa-calendar-days text-gray-500 mr-2"></i>
+                            {{ $consultation->appointment->date->format('d/m/Y H:i')}}
+                        </p>
+
+                        <p>
+                            Atendido por:
+                            Dr(a).{{ $consultation->appointment->doctor->user->name }}
+                        </p>
+                    </div>
+
+                    <div>
+                        <x-wire-button class="w-full lg:w-auto">
+                            ver detalle
+                        </x-wire-button>
+                    </div>
+                </div>
+            </a>
+            @empty
+            <div class="text-center py-10 rounded-xl border border-dashed">
+                <i class="fa-solid fa-inbox text-5xl text-gray-300"></i>
+
+                <p class="mt-4 text-sm font-medium text-gray-500">
+                Nose encontraron consultas anteriores para este paciente
+                </p>
+            </div>
+        @endforelse
+
+        <x-slot name="footer">
+            <div class="flex justify-end">
+                <x-wire-button outline gray sm x-on:click="$closeModal('previusConsultationsModal')">
+                    Cerrar
+                </x-wire-button>
+                
+            </div>
+        </x-slot>
+
+        
+    </x-wire-modal-card >
 </div>

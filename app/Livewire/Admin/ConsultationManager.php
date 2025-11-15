@@ -14,11 +14,14 @@ class ConsultationManager extends Component
     public Consultation $consultation;
     public Patient $patient;
 
+    public $previusConsultations;
+
+
     public $form = [
         'diagnosis' => '',
         'treatment' => '', 
             'notes' => '',
-   'prescriptions' => [],
+     'prescriptions' => [],
     ];
 
     public function mount(Appointment $appointment)
@@ -26,17 +29,25 @@ class ConsultationManager extends Component
         $this->consultation = $appointment->consultation ?? new Consultation();
         $this->patient = $appointment->patient;
         $this->form = [     
-        'diagnosis' => $this->consultation->diagnosis,
-        'treatment' => $this->consultation->treatment,
-            'notes' => $this->consultation->notes,
-        'prescriptions' =>$this->consultation->prescriptions ?? [
-           [
-            'medicine' => '',
-             'dosage' => '',
-           'frequency' => '',
-           ] 
-        ],
+            'diagnosis' => $this->consultation->diagnosis,
+            'treatment' => $this->consultation->treatment,
+                'notes' => $this->consultation->notes,
+            'prescriptions' =>$this->consultation->prescriptions ?? [
+            [
+                'medicine' => '',
+                'dosage' => '',
+            'frequency' => '',
+            ] 
+            ],
         ];
+            $this->previusConsultations = Consultation::whereHas('appointment', function ($query){
+             $query->where('patient_id', $this->patient->id);   
+            })
+            ->where('id', '!=', $this->consultation->id)
+            ->where('created_at', '<', $this->consultation->created_at)
+            ->latest()
+            ->take(5)
+            ->get();
     }
 
     public function addPrescription(){
