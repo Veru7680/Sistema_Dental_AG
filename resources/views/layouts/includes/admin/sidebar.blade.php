@@ -47,6 +47,13 @@ $links = [
     ],
 
     [
+        'name'   => 'Calendario',
+        'icon'   => 'fa-solid fa-calendar-days',
+        'href'   => route('admin.calendar.index'),
+        'active' => request()->routeIs('admin.calendar.*'),
+    ],
+
+    [
         'name'   => 'Dashboard',
         'icon'   => 'fa-solid fa-gauge',
         'href'   => route('admin.dashboard'),
