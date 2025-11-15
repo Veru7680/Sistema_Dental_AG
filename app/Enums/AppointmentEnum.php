@@ -14,9 +14,7 @@ enum AppointmentEnum: int
                 self::SCHEDULED => 'Programado',
                 self::COMPLETED => 'Completado',
                 self::CANCELLED => 'Cancelado',
-
                 };
-
         }
 
         public function color(): string 
@@ -28,6 +26,11 @@ enum AppointmentEnum: int
 
                 };
 
+        }
+
+        public function isEditable():bool
+        {
+                return $this === self::SCHEDULED;
         }
 
         

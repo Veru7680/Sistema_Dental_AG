@@ -43,7 +43,12 @@ class AppointmentTable extends DataTableComponent
                 ->format(function ($value){
                     return $value->format('H:i');
                 })
-                ->sortable(),  
+                ->sortable(), 
+                
+            Column::make("Estado","status")
+            ->format(function ($value){
+                return $value->label();
+            }),
                 
              Column::make("Acciones")
                 ->label(function($row){

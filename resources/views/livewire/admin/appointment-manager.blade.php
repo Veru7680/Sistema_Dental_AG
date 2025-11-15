@@ -50,9 +50,8 @@
                 <x-wire-button
                 wire:click="searchAvailability"
                 class="w-full"
-                color="primary"                
-                >
-                    Buscar Disponibilidad
+                color="primary" 
+                :disabled="$appointmentEdit && !$appointmentEdit->status->isEditable()">                    Buscar Disponibilidad
                 </x-wire-button>
              </div>
 
