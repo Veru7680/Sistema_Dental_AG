@@ -18,9 +18,9 @@
                 </div>
 
                 <div class="flex space-x-7 mt-6 lg:mt-0 ">
-                    <x-wire-button outline gray sm >
+                    <x-wire-button outline gray sm x-on:click="$openModal('historyModal')">
                         <i class="fa-solid fa-notes-medical"></i>
-                        Ver Historial
+                        Ver Historia
                     </x-wire-button>
 
 
@@ -143,6 +143,57 @@
         </div>
     </x-wire-card> 
 
+    <x-wire-modal-card 
+    title="Historia Medica del paciente" 
+    name="historyModal"
+    width="5xl">
 
+
+        <div class="grid grid-cols-4 gap-6">
+            <div>
+                <p class="font-medium text-gray-500 mb-1">
+                    Alergias:
+                </p>
+
+                <p class="font-semibold text-gray-800">
+                    {{ $patient->allergies ?? 'No registrado' }}
+                </p>
+            </div>
+
+            <div>
+                <p class="font-medium text-gray-500 mb-1">
+                    Enfermedades Cronicas:
+                </p>
+
+                <p class="font-semibold text-gray-800">
+                    {{ $patient->chronic_conditions ?? 'No registrado' }}
+                </p>
+            </div>
+
+            <div>
+                <p class="font-medium text-gray-500 mb-1">
+                    Observaciones:
+                </p>
+
+                <p class="font-semibold text-gray-800">
+                    {{ $patient->observations ?? 'No registrado' }}
+                </p>
+            </div>
+            
+        </div>
+
+        <x-slot name="footer">
+            <div class="flex justify-end">
+                <a href="{{route('admin.patients.edit', $patient->id)}}"
+                class="font-semibold text-blue-600 hover:text-blue-800"
+                target="_black">
+                Ver / Editar Historia Medica
+                </a>
+            </div>
+
+        </x-slot>
+       
+    </x-wire-modal-card>
+    
 
 </div>

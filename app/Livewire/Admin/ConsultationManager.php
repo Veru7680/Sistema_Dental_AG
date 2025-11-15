@@ -5,12 +5,14 @@ namespace App\Livewire\Admin;
 use Livewire\Component;
 use App\Models\Appointment;
 use App\Models\Consultation;
+use App\Models\Patient;
 use App\Enums\AppointmentEnum;
 
 class ConsultationManager extends Component
 {
     public Appointment $appointment;
     public Consultation $consultation;
+    public Patient $patient;
 
     public $form = [
         'diagnosis' => '',
@@ -22,6 +24,7 @@ class ConsultationManager extends Component
     public function mount(Appointment $appointment)
     {
         $this->consultation = $appointment->consultation ?? new Consultation();
+        $this->patient = $appointment->patient;
         $this->form = [     
         'diagnosis' => $this->consultation->diagnosis,
         'treatment' => $this->consultation->treatment,
