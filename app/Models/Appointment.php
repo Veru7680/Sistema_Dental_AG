@@ -3,6 +3,8 @@
 namespace App\Models;
 use App\Enums\AppointmentEnum;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute; // Necesitas importar Attribute
+use Carbon\Carbon;
 
 class Appointment extends Model
 {
@@ -24,6 +26,31 @@ class Appointment extends Model
         'status' => AppointmentEnum::class,
        
     ];
+    //accesores
+    public function start(): Attribute
+    {
+        return Attribute::make(
+            get: function(){
+                $date = $this->date->format('Y-m-d');
+                $time = $this->start_time->format('H:i:s');
+                //Retornar formato
+                return Carbon::parse("{$date} {$time}")->toIso8601String();
+
+            }
+        );
+    }
+
+    public function end(): Attribute
+    {
+        return Attribute::make(
+            get: function(){
+                $date = $this->date->format('Y-m-d');
+                $time = $this->end_time->format('H:i:s');
+                //Retornar formato
+                return Carbon::parse("{$date} {$time}")->toIso8601String();
+            }
+        );
+    }
 
       //relacion uno a uno
     public function consultation(){

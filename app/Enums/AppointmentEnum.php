@@ -28,6 +28,16 @@ enum AppointmentEnum: int
 
         }
 
+        public function colorHex():string
+        {
+             return match($this) {
+                self::SCHEDULED => '#007bff',
+                self::COMPLETED => '#27a745',
+                self::CANCELLED => '#dc3545',
+
+                };           
+        }
+
         public function isEditable():bool
         {
                 return $this === self::SCHEDULED;

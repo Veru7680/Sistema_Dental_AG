@@ -44,11 +44,16 @@ title=" Calendario | Dental AG"
                             
                             initialView: 'timeGridWeek',
                             slotDuration:'00:15:00',
-                            /* slotMinTime:'08:00:00', */
                             slotMinTime:"{{ config('schedule.start_time')}}",
-                            /*slotMaxTime:'20:00:00',*/
                             slotMaxTime:"{{ config('schedule.end_time')}}",
-                            srollTime:"{{ date('H:i:s')}}",
+                                
+                            events:{
+                                url:"{{ route('api.appointments.index')}}",
+                                failure: function(){
+                                  alert('Hubo un errror al cargar los eventos');  
+                                }
+                            },
+                              srollTime:"{{ date('H:i:s')}}",
                             });
                             calendar.render();  
                     }
