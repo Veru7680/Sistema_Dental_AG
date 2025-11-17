@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Gate;
 
 class RoleController extends Controller
 {
@@ -12,7 +13,7 @@ class RoleController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
+    {   Gate::authorize('read_role');
         return view('admin.roles.index');
     }
 
@@ -21,6 +22,7 @@ class RoleController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create_role');
       return view('admin.roles.create');
     }
 
@@ -29,6 +31,7 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
+        Gate::authorize('create_role');
        $request -> validate([
         'name'=> 'required|unique:roles,name',
        ]);
@@ -49,6 +52,7 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
+        Gate::authorize('read_role');
     return view('admin.roles.show',compact('role'));
     }
 
@@ -57,6 +61,7 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
+        Gate::authorize('update_role');
         if ($role->id <= 4) {
         session()->flash('swal', [
             'title' => 'Error',
@@ -76,7 +81,8 @@ class RoleController extends Controller
      */
     public function update(Request $request, Role $role)
     {
-             $request -> validate([
+        Gate::authorize('update_role');
+        $request -> validate([
         'name'=> 'required|unique:roles,name,' . $role->id,
        ]);
 
@@ -96,10 +102,9 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
-
-        
- if ($role->id <= 4) {
-        session()->flash('swal', [
+         Gate::authorize('delete_role');
+        if ($role->id <= 4) {
+            session()->flash('swal', [
             'title' => 'Error',
             'text'  => 'No puedes eliminar este Rol',
             'icon'  => 'error',

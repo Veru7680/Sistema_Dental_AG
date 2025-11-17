@@ -53,30 +53,7 @@ $links = [
         'active' => request()->routeIs('admin.calendar.*'),
     ],
 
-    [
-        'name'   => 'Dashboard',
-        'icon'   => 'fa-solid fa-gauge',
-        'href'   => route('admin.dashboard'),
-        'active' => false,
-        'submenu'=> [
-            [
-                'name'   => 'producto 1',
-                'href'   => '#',   
-                'active' => false,
-            ],
-              [
-                'name'   => 'producto 2',
-                'href'   => '#',   
-                'active' => false,
-            ],
-              [
-                'name'   => 'producto 3',
-                'href'   => '#',   
-                'active' => false,
-            ],
-        ],
-    ],
-
+  
    
     
 ];

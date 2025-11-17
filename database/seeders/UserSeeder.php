@@ -22,7 +22,7 @@ class UserSeeder extends Seeder
             'address'=> 'calle 14 esquina 109, Barrio Nuevo',
          ]);
          
-         $user->assignRole('Doctor');
+         $user->assignRole('Admin');
          $user->doctor()->create();
     }
 }

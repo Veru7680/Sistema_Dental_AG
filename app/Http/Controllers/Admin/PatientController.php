@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Patient;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class PatientController extends Controller
 {
     public function index()
     {
+        Gate::authorize('read_paciente');
      return view('admin.patients.index');
     }
     
@@ -21,6 +23,7 @@ class PatientController extends Controller
 
     public function edit(Patient $patient)
     {
+        Gate::authorize('update_paciente');
     return view('admin.patients.edit', compact('patient'));
 
     }
@@ -28,6 +31,7 @@ class PatientController extends Controller
    
     public function update(Request $request, Patient $patient)
     {
+        Gate::authorize('update_paciente');
         $data = $request->validate([
             'allergias' => 'nullable|string|max:255',
             'chronic_conditions' => 'nullable|string|max:255',

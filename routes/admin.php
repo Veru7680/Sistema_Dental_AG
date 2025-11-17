@@ -7,12 +7,10 @@ use App\Http\Controllers\Admin\PatientController;
 use App\Http\Controllers\Admin\DoctorController;
 use App\Http\Controllers\Admin\AppointmentController;
 use App\Http\Controllers\Admin\CalendarController;
+use App\Http\Controllers\Admin\DashboardController;
 
 
-
-Route::get ('/', function(){
-    return view('admin.dashboard');
-})->name('dashboard');
+Route::get ('/',[DashboardController::class, 'index'])->name('dashboard');
 //gestion de Roles
 Route::resource('roles', RoleController::class);
 Route::resource('users', UserController::class);
