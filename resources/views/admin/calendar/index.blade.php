@@ -13,7 +13,52 @@ title=" Calendario | Dental AG"
     
     ]"  >
 
+        @push('css')
+        <style>
+            .fc-event{
+                cursor:pointer;
+            }
+        </style>
+        @endpush
+
     <div x-data="data()">
+        <x-wire-modal-card 
+            title="Cita Medica" 
+            name="appointmentModal"
+            width="md"
+            align="center"
+            >
+
+            <div class="space-y-4 mb-4">
+                <div>
+                    <strong>Hora y Fecha</strong>
+                    <span x-text="selectedEvent.dateTime"></span>
+                </div>
+
+                <div>
+                    <strong>Paciente</strong>
+                    <span x-text="selectedEvent.patient"></span>
+                </div>
+
+                <div>
+                    <strong>Medico</strong>
+                    <span x-text="selectedEvent.doctor"></span>
+                </div>
+
+                <div>
+                    <strong>Estado</strong>
+                    <span x-text="selectedEvent.status"></span>
+                </div>
+                
+            </div>
+
+            <a x-bind:href="selectedEvent.url" class="w-full">
+                <x-wire-button class="w-full">
+                Gestionar Cita
+                </x-wire-button>
+           </a>
+        </x-wire-modal-card>
+
         <div x-ref='calendar'></div>
     </div>
 
@@ -23,6 +68,28 @@ title=" Calendario | Dental AG"
          <script>
             function data(){
                 return {
+                    selectedEvent:{
+                        dateTime: null,
+                        patient: null,
+                        doctor: null,
+                        status: null, 
+                        color: null, 
+                        url: null,
+                    },
+
+                    openModal(info)
+                    {
+                        this.selectedEvent = {
+                                    dateTime: info.event.extendedProps.dateTime, 
+                                    patient: info.event.extendedProps.patient, 
+                                    doctor: info.event.extendedProps.doctor, 
+                                    status: info.event.extendedProps.status, 
+                                    color: info.event.extendedProps.color, 
+                                    url: info.event.extendedProps.url,
+                                };
+                         $openModal('appointmentModal');
+                    },
+
                     init(){
                       var calendarEl = this.$refs.calendar;
                        var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -50,10 +117,12 @@ title=" Calendario | Dental AG"
                             events:{
                                 url:"{{ route('api.appointments.index')}}",
                                 failure: function(){
-                                  alert('Hubo un errror al cargar los eventos');  
+                                  alert('Hubo un error al cargar los eventos');  
                                 }
                             },
-                              srollTime:"{{ date('H:i:s')}}",
+                            eventClick: (info)=> this.openModal(info),
+
+                              scrollTime:"{{ date('H:i:s')}}",
                             });
                             calendar.render();  
                     }

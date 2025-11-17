@@ -42,10 +42,17 @@ Route::get('/appointments', function(Request $request){
        return [
         'id' => $appointment->id,
         'title' => $appointment->patient->user->name,
-        'start' => $appointment->start,
-        'end' => $appointment->end,
+        'start' => $appointment->start->toIso8601String(),
+        'end' => $appointment->end->toIso8601String(),
         'color' => $appointment->status->colorHex(),
-        'extendedProps'=>[],
+        'extendedProps'=>[
+            'dateTime' => $appointment->start->format('d-m-Y H:i:s'),
+            'patient' => $appointment->patient->user->name,
+            'doctor' => $appointment->doctor->user->name,
+            'status' => $appointment->status->label(),
+            'color' => $appointment->status->color(),
+            'url' => route('admin.appointments.edit', $appointment->id),
+        ]
         ];
         })->values(); 
 

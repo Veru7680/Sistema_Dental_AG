@@ -34,7 +34,7 @@ class Appointment extends Model
                 $date = $this->date->format('Y-m-d');
                 $time = $this->start_time->format('H:i:s');
                 //Retornar formato
-                return Carbon::parse("{$date} {$time}")->toIso8601String();
+                return Carbon::parse("{$date} {$time}");
 
             }
         );
@@ -47,7 +47,7 @@ class Appointment extends Model
                 $date = $this->date->format('Y-m-d');
                 $time = $this->end_time->format('H:i:s');
                 //Retornar formato
-                return Carbon::parse("{$date} {$time}")->toIso8601String();
+                return Carbon::parse("{$date} {$time}");
             }
         );
     }
