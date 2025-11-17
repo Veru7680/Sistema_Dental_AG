@@ -51,7 +51,7 @@ Route::get('/appointments', function(Request $request){
             'doctor' => $appointment->doctor->user->name,
             'status' => $appointment->status->label(),
             'color' => $appointment->status->color(),
-            'url' => route('admin.appointments.edit', $appointment->id),
+            'url' => route('admin.appointments.consultation', $appointment->id),
         ]
         ];
         })->values(); 

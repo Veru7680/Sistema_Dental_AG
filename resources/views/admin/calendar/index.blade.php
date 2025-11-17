@@ -54,7 +54,7 @@ title=" Calendario | Dental AG"
 
             <a x-bind:href="selectedEvent.url" class="w-full">
                 <x-wire-button class="w-full">
-                Gestionar Cita
+                Gestionar cita
                 </x-wire-button>
            </a>
         </x-wire-modal-card>
