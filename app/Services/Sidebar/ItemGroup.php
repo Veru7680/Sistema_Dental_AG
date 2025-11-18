@@ -28,16 +28,24 @@ class ItemsGroup implements ItemSidebar
 
     public function reder():string
     {
+        $items = array_filter($this->items, function ($item){
+            return $item->authorize();
+        });
         return view('sidebar.items-group',[
             'title' => $this->title,
            'icon' => $this->icon,
            'active' => $this->active,
-            'items' => $this->items,
+            'items' => $items,
             ])->render();
     }
 
     public function authorize():bool
     {
-        return true;
+        foreach ($this->item as $item) {
+            if ($item->authorize()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

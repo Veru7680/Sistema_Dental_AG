@@ -13,6 +13,11 @@ class SidebarComposer
         ->map(function ($item){
             return $this->parseItem($item);
         });
+
+        $items = $items->filter(function ($item){
+            return $item->authorize();
+        });
+
         $view->with('sidebarItems', $items);
     }
 

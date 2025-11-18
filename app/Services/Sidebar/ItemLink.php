@@ -1,5 +1,6 @@
 <?php
 namespace App\Services\Sidebar;
+use Illuminate\Support\Facades\Gate;
 
 class ItemLink implements ItemSidebar
 {
@@ -7,14 +8,14 @@ class ItemLink implements ItemSidebar
     private string $icon;
     private string $href;
     private bool $active;
-    private array $can;
+    private array $can ;
 
      public function __construct( 
         string $title, 
         string $icon,
         string $href,
         bool $active,
-        array $can)
+        array $can )
     {
        $this->title = $title;
        $this->icon = $icon;
@@ -40,6 +41,7 @@ class ItemLink implements ItemSidebar
 
     public function authorize():bool
     {
-        return true;
+        return count($this->can)
+        ? Gate::any($this->can): true;
     }
 }

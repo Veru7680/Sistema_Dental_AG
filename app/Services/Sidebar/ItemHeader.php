@@ -1,5 +1,6 @@
 <?php
 namespace App\Services\Sidebar;
+use Illuminate\Support\Facades\Gate;
 
 class ItemHeader implements ItemSidebar
 {   private string $title;
@@ -24,6 +25,7 @@ class ItemHeader implements ItemSidebar
 
     public function authorize():bool
     {
-        return true;
+        return count($this->can)
+        ? Gate::any($this->can): true;
     }
 }
