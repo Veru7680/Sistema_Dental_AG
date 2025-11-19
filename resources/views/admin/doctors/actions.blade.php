@@ -7,5 +7,5 @@
         <x-wire-button href="{{route('admin.doctors.schedules', $doctor)}}" green xs>
             <i class="fa-solid fa-clock"></i>
         </x-wire-button>
-        @endcan
+    @endcan
 </div>

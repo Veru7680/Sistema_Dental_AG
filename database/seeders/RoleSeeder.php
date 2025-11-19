@@ -32,6 +32,7 @@ class RoleSeeder extends Seeder
                 'create_appointment',
                 'read_appointment',
                 'delete_appointment',
+                'update_appointment',
 
                 'read_calendar',  
             ],

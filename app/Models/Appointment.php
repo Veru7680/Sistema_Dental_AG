@@ -2,10 +2,14 @@
 
 namespace App\Models;
 use App\Enums\AppointmentEnum;
+use App\Models\Scopes\VerifyRole;
+use App\Models\Scopes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute; // Necesitas importar Attribute
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Carbon\Carbon;
 
+#[ScopedBy([( VerifyRole:: class)])]
 class Appointment extends Model
 {
     protected $fillable =[
@@ -26,6 +30,8 @@ class Appointment extends Model
         'status' => AppointmentEnum::class,
        
     ];
+
+
     //accesores
     public function start(): Attribute
     {
