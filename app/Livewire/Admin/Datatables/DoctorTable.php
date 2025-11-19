@@ -12,6 +12,9 @@ class DoctorTable extends DataTableComponent
     public function builder(): Builder
     {
     return Doctor::query()
+     ->whereHas('user', function (Builder $query){
+        $query->role('doctor');
+    }) 
     ->with(['user', 'speciality']);
     }
 

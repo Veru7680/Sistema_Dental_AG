@@ -11,8 +11,21 @@ class AppointmentTable extends DataTableComponent
 {
     public function builder(): Builder
     {
-    return Appointment::query()
-    ->with(['patient.user', 'doctor.user']);
+        $query = Appointment::query()
+        ->with(['patient.user', 'doctor.user']);
+            
+            if (auth()->user()->hasRole('Doctor')) {
+                $query->whereHas('doctor', function ($query){
+                    $query->where('user_id', auth()->id());
+                });
+            }
+
+            if (auth()->user()->hasRole('Paciente')) {
+                $query->whereHas('patient', function ($query){
+                    $query->where('user_id', auth()->id());
+                });
+            }
+            return  $query;
     }
 
     public function configure(): void
