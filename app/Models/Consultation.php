@@ -17,7 +17,7 @@ class Consultation extends Model
 
     protected $casts =[
        
-        'prescriptions' => 'json',
+        'prescriptions' => 'array',
 
     ];
 
