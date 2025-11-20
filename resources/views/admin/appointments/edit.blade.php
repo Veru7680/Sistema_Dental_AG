@@ -18,6 +18,16 @@ title=" Citas | Dental AG" {{-- Aquí cambia el título de la página --}}
     
     ]"  >
 
+    <x-slot name="action">
+        <form action="{{ route('admin.appointments.destroy', $appointment)}}" method="POST">
+            @csrf
+            @method('DELETE')
+            <x-wire-button red type="submit">
+                Cancelar Cita
+            </x-wire-button>
+        </form>
+    </x-slot>
+
     <x-wire-card class=" mt-4">
         <div class="flex items-center justify-between">
             <div>
@@ -47,8 +57,19 @@ title=" Citas | Dental AG" {{-- Aquí cambia el título de la página --}}
 
         </div>
     </x-wire-card>       
+   
+   @if($appointment->status->isEditable())
     @livewire('admin.appointment-manager', [
        'appointmentEdit' => $appointment,
         ])
+
+        @else
+            <x-wire-card class=" mt-4">
+                <p class="">
+                    Esta cita no se puede editar por que ya ha sido Completada o Cancelada 
+                </p>
+            </x-wire-card>  
+
+    @endif
 
 </x-admin-layout>

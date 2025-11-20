@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use App\Enums\AppointmentEnum;
+
 
 class AppointmentController extends Controller
 {
@@ -69,6 +71,16 @@ class AppointmentController extends Controller
     public function destroy(Appointment $appointment)
     {
         Gate::authorize('delete_appointment');
+         $appointment->status = AppointmentEnum::CANCELLED;
+         $appointment->save();
+
+        session()->flash('swal', [
+             'icon' => 'success',
+            'title' => 'Cita Cancelada', 
+           'text' => 'La cita ha sido cancelada correctamente',
+           
+        ]);
+        return redirect()->route('admin.appointments.edit', $appointment);         
     }
 
     public function consultation(Appointment $appointment)
