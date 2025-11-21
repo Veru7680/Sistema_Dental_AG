@@ -55,7 +55,12 @@ class AppointmentManager extends Component
             $this->appointment['patient_id'] = [
                   $this->appointment['patient_id'] => $this->appointmentEdit->patient_id
             ];
-         }   
+         } 
+         
+         if (auth()->user()->hasRole('Paciente')){
+            $this->appointment['patient_id'] = auth()->user()->patient->id;
+         }
+
     }
 
     public function updated($property, $value)

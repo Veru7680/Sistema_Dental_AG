@@ -157,7 +157,9 @@
                             </div>
                         </div>
 
-                        <hr class="my-5">
+                    <hr class="my-5">
+
+                    @if(!$appointment && auth()->user()->hasRole('Paciente'))
                         <div class="space-y-6">
                             <x-wire-select
                             label="paciente"
@@ -168,6 +170,7 @@
                             option-label="name"
                             option-value="id"
                         />
+                    @endif
 
                         <x-wire-textarea 
                         label="Motivo de la cita"

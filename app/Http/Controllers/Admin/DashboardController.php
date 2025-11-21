@@ -64,6 +64,21 @@ class DashboardController extends Controller
 
         }
 
+        if (auth()->user()->hasRole('Paciente')) {
+             $data ['next_appointment'] = Appointment::whereHas('patient', function($query){
+                $query->where('user_id', auth()->id());
+            })
+            ->latest()
+            ->first(); 
+
+            $data['past_appointments'] = Appointment::whereHas('patient', function($query){
+                $query->where('user_id', auth()->id());
+            })
+            ->latest()
+            ->take(5)
+            ->get();
+        }
+
         return view('admin.dashboard', compact('data'));
     }
 }
