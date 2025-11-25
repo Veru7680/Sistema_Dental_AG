@@ -158,9 +158,8 @@
                         </div>
 
                     <hr class="my-5">
-
-                    @if(!$appointment && auth()->user()->hasRole('Paciente'))
                         <div class="space-y-6">
+                         @if(!$appointmentEdit && !auth()->user()->hasRole('Paciente'))
                             <x-wire-select
                             label="paciente"
                             placeholder="Selecciona un paciente"

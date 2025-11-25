@@ -68,13 +68,18 @@ class DashboardController extends Controller
              $data ['next_appointment'] = Appointment::whereHas('patient', function($query){
                 $query->where('user_id', auth()->id());
             })
+            ->whereDate('date', '>=', now())
+            ->whereTime('end_time', '>=', now()->toTimeString())
+            ->orderBy('start_time')
             ->latest()
             ->first(); 
 
             $data['past_appointments'] = Appointment::whereHas('patient', function($query){
                 $query->where('user_id', auth()->id());
             })
-            ->latest()
+            ->where('status' , AppointmentEnum::SCHEDULED)
+            ->whereDate('date', '<', now())
+            ->orderBy('date', 'desc')
             ->take(5)
             ->get();
         }

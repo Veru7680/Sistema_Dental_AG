@@ -76,7 +76,7 @@
     "Dashboard": "Panel",
     "Delete": "Eliminar",
     "Delete :name": "Eliminar :name",
-    "Delete Account": "Borrar cuenta",
+    "Delete Account": "No puede borrar",
     "Delete API Token": "Borrar token API",
     "Delete Team": "Borrar equipo",
     "Detach": "Desvincular",

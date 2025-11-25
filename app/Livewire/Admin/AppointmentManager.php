@@ -52,9 +52,7 @@ class AppointmentManager extends Component
             : now()->format('Y-m-d');
 
          if ($this->appointmentEdit){
-            $this->appointment['patient_id'] = [
-                  $this->appointment['patient_id'] => $this->appointmentEdit->patient_id
-            ];
+         $this->appointment['patient_id'] = $this->appointmentEdit->patient_id;
          } 
          
          if (auth()->user()->hasRole('Paciente')){

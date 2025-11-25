@@ -76,6 +76,13 @@ title=" Pacientes | Dental AG" {{-- Aquí cambia el título de la página --}}
                                 
                         </x-tab-link>
 
+                        <x-tab-link tab="historial">                               
+                                    <i class="fa-solid fa-heart me-2 "></i>      
+                                    Tabla Historial
+                                
+                        </x-tab-link>
+
+
                     </x-slot>
                     {{-- Datos Personales --}}
                     <x-tab-content tab="datos-personales">
@@ -86,7 +93,7 @@ title=" Pacientes | Dental AG" {{-- Aquí cambia el título de la página --}}
                                                     perfil del usuario
                                                 </a> asociado a este paciente 
                                             </p>                                         
-                            </x-wire-alert>
+                        </x-wire-alert>
 
                         <div class="grid lg:grid-cols-2 gap-4">
                                         
@@ -195,10 +202,80 @@ title=" Pacientes | Dental AG" {{-- Aquí cambia el título de la página --}}
                                         name="emergency_contact_relationship"
                                         value="{{old('emergency_contact_relationship', $patient->emergency_contact_relationship)}}"/>
 
-                            </div>
-
-                            
+                            </div>                        
                     </x-tab-content>  
+
+                    <x-tab-content tab="historial">
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full bg-white border border-gray-200 rounded-lg text-sm">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-4 py-3 border-b border-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Fecha
+                                        </th>
+                                        <th class="px-4 py-3 border-b border-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Médico
+                                        </th>
+                                        <th class="px-4 py-3 border-b border-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Diagnóstico
+                                        </th>
+                                        <th class="px-4 py-3 border-b border-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Tratamiento
+                                        </th>
+                                        <th class="px-4 py-3 border-b border-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Receta
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200">
+                                    @forelse($previusConsultations as $consultation)
+                                    <tr class="hover:bg-gray-50 transition-colors duration-150">
+                                        <td class="px-4 py-3 whitespace-nowrap text-gray-900">
+                                            {{ $consultation->appointment->date->format('d-m-Y') }}
+                                        </td>
+                                        <td class="px-4 py-3 text-gray-900">
+                                            <div class="font-medium">Dr. {{ $consultation->appointment->doctor->user->name ?? 'N/A' }}</div>
+                                            <div class="text-xs text-gray-500">{{ $consultation->appointment->doctor->specialty ?? 'Sin especialidad' }}</div>
+                                        </td>
+                                        <td class="px-4 py-3 text-gray-900">
+                                            {{ $consultation->diagnosis ?? 'Sin diagnóstico' }}
+                                        </td>
+                                        <td class="px-4 py-3 text-gray-900">
+                                            {{ $consultation->treatment ?? 'Sin tratamiento' }}
+                                        </td>
+                                        <td class="px-4 py-3 text-gray-900">
+                                            @if($consultation->prescriptions && count($consultation->prescriptions) > 0)
+                                                <div class="space-y-2">
+                                                    @foreach($consultation->prescriptions as $prescription)
+                                                        <div class="bg-blue-50 border border-blue-200 rounded p-2">
+                                                            <div class="font-medium text-blue-800 text-xs">
+                                                                💊 {{ is_array($prescription) ? $prescription['medicine'] : $prescription->medicine }}
+                                                            </div>
+                                                            <div class="text-xs text-blue-600 mt-1">
+                                                                <strong>Dosis:</strong> {{ is_array($prescription) ? $prescription['dosage'] : $prescription->dosage }}
+                                                            </div>
+                                                            <div class="text-xs text-blue-600">
+                                                                <strong>Instrucciones:</strong> {{ is_array($prescription) ? $prescription['frequency'] : $prescription->frequency }}
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            @else
+                                                <span class="text-gray-400 text-xs">Sin receta médica</span>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    @empty
+                                    <tr>
+                                        <td colspan="5" class="px-4 py-6 text-center text-gray-500">
+                                            No hay consultas anteriores para este paciente
+                                        </td>
+                                    </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </x-tab-content>
 
                  </div>
                  

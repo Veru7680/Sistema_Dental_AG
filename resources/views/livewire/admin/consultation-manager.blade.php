@@ -44,6 +44,12 @@
                     <i class="fa-solid fa-prescription-bottle-medical me-2"></i>
                         Receta
                 </x-tab-link>
+
+                <x-tab-link tab="historial">
+                    <i class="fa-solid fa-prescription-bottle-medical me-2"></i>
+                        Tabla Historial
+                </x-tab-link>
+
             </x-slot>
 
             <x-tab-content tab="consulta">
@@ -129,6 +135,85 @@
 
                 </div>
 
+            </x-tab-content>
+
+            <x-tab-content tab="historial">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border border-gray-200 rounded-lg text-sm">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-3 border-b border-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Fecha
+                                </th>
+                                <th class="px-4 py-3 border-b border-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Médico
+                                </th>
+                                <th class="px-4 py-3 border-b border-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Diagnóstico
+                                </th>
+                                <th class="px-4 py-3 border-b border-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Tratamiento
+                                </th>
+                                <th class="px-4 py-3 border-b border-gray-200 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Receta
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            @forelse($previusConsultations as $consultation)
+                            <tr class="hover:bg-gray-50 transition-colors duration-150">
+                                <!-- Fecha -->
+                                <td class="px-4 py-3 whitespace-nowrap text-gray-900">
+                                    {{ $consultation->appointment->date->format('d-m-Y') }}
+                                </td>
+                                
+                                <!-- Médico -->
+                                <td class="px-4 py-3 text-gray-900">
+                                    <div class="font-medium">Dr. {{ $consultation->appointment->doctor->user->name ?? 'N/A' }}</div>
+                                    <div class="text-xs text-gray-500">{{ $consultation->appointment->doctor->specialty ?? 'Sin especialidad' }}</div>
+                                </td>
+                                
+                                <!-- Diagnóstico -->
+                                <td class="px-4 py-3 text-gray-900">
+                                    {{ $consultation->diagnosis ?? 'Sin diagnóstico' }}
+                                </td>
+                                
+                                <!-- Plan de Tratamiento -->
+                                <td class="px-4 py-3 text-gray-900">
+                                    {{ $consultation->treatment ?? 'Sin tratamiento' }}
+                                </td>
+                                
+                                <!-- Prescripción -->
+                                <td class="px-4 py-3 text-gray-900">
+                                    @if($consultation->prescriptions && count($consultation->prescriptions) > 0)
+                                        <div class="space-y-1">
+                                            @foreach($consultation->prescriptions as $prescription)
+                                                <div class="border-l-2 border-blue-400 pl-2">
+                                                    <div class="font-medium text-blue-800 text-xs">
+                                                        {{ is_array($prescription) ? $prescription['medicine'] : $prescription->medicine }}
+                                                    </div>
+                                                    <div class="text-xs text-gray-600">
+                                                        Dosis: {{ is_array($prescription) ? $prescription['dosage'] : $prescription->dosage }} - 
+                                                        {{ is_array($prescription) ? $prescription['frequency'] : $prescription->frequency }}
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @else
+                                        <span class="text-gray-400 text-xs">Sin receta</span>
+                                    @endif
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="5" class="px-4 py-6 text-center text-gray-500">
+                                    No hay consultas anteriores para este paciente
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
             </x-tab-content>
 
         </x-tabs>

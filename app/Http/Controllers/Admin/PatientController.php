@@ -22,13 +22,33 @@ class PatientController extends Controller
     }
 
     public function edit(Patient $patient)
-    {
-        Gate::authorize('update_paciente');
-    return view('admin.patients.edit', compact('patient'));
-
+{
+    Gate::authorize('update_paciente');
+    
+    // Primero verifica si existe la relación
+    try {
+        $previusConsultations = \App\Models\Consultation::whereIn('appointment_id', 
+            \App\Models\Appointment::where('patient_id', $patient->id)->pluck('id')
+        )
+        ->with(['appointment.doctor.user'])
+        ->orderBy('created_at', 'desc')
+        ->get();
+        
+        // Intenta cargar prescriptions si existe
+        $previusConsultations->load('prescriptions');
+        
+    } catch (\Exception $e) {
+        // Si falla, carga sin prescriptions
+        $previusConsultations = \App\Models\Consultation::whereIn('appointment_id', 
+            \App\Models\Appointment::where('patient_id', $patient->id)->pluck('id')
+        )
+        ->with(['appointment.doctor.user'])
+        ->orderBy('created_at', 'desc')
+        ->get();
     }
 
-   
+    return view('admin.patients.edit', compact('patient', 'previusConsultations'));
+}
     public function update(Request $request, Patient $patient)
     {
         Gate::authorize('update_paciente');
