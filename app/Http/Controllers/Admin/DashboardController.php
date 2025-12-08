@@ -22,23 +22,23 @@ class DashboardController extends Controller
 
             $data['total_patients'] = Patient::count();
             $data['total_doctors'] = Doctor::count();
-            $data['appointments_today'] = Appointment::whereDate('created_at', now())
+            $data['appointments_today'] = Appointment::whereDate('date', now()->toDateString())
                 ->where('status', AppointmentEnum::SCHEDULED)
-                ->count();   
+                ->count();  
                 
             $data['recent_users'] = User::latest()
-                ->take(5)
+                ->take(4)
                 ->get();
         }
 
         if (auth()->user()->hasRole('Doctor')) {
-            $data['appointments_today_count'] = Appointment::whereDate('created_at', now())
+            $data['appointments_today_count'] = Appointment::whereDate('date', now())
             ->where('status' , AppointmentEnum::SCHEDULED)
             ->whereHas('doctor', function($query){
                 $query->where('user_id', auth()->id());
             })->count();
 
-            $data ['appointments_week_count'] = Appointment::whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])
+            $data ['appointments_week_count'] = Appointment::whereBetween('date', [now()->startOfWeek(), now()->endOfWeek()])
             ->where('status', AppointmentEnum::SCHEDULED)
             ->whereHas('doctor', function($query){
                 $query->where('user_id', auth()->id());
@@ -54,13 +54,21 @@ class DashboardController extends Controller
             ->first();   
 
              $data['appointments_today'] = Appointment::whereHas('doctor', function($query){
-                $query->where('user_id', auth()->id());
-            })
-            ->where('status', AppointmentEnum::SCHEDULED)
-            ->whereDate('date', '>=', now())
-            ->whereTime('end_time', '>=', now()->toTimeString())
-            ->orderBy('start_time')
-            ->get();   
+                    $query->where('user_id', auth()->id());
+                })
+                ->where('status', AppointmentEnum::SCHEDULED)
+                ->where(function($query) {
+                    // Citas de días futuros
+                    $query->whereDate('date', '>', now()->format('Y-m-d'))
+                        // O citas de hoy que no han terminado
+                        ->orWhere(function($q) {
+                            $q->whereDate('date', now()->format('Y-m-d'))
+                                ->whereTime('end_time', '>=', now()->format('H:i:s'));
+                        });
+                })
+                ->orderBy('date')
+                ->orderBy('start_time')
+                ->get();  
 
         }
 

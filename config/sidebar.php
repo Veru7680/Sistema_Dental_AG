@@ -1,7 +1,7 @@
 <?php
  return [
     [   'type' => 'link',
-        'title' => 'Dashboard',
+        'title' => 'Menu de Inicio',
         'icon' => 'fa-solid fa-chart-pie',
         'route' => 'admin.dashboard',
         'active' => 'admin.dashboard',

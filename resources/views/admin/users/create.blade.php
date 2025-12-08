@@ -87,21 +87,25 @@ title=" Usuarios | Dental AG" {{-- Aquí cambia el título de la página --}}
             />
 
 
-            <x-wire-native-select 
-            label="Rol"
-            name="role_id">
-                
-                <option value="">
-                Seleccione un rol
-                </option>
+           @php
+                $availableRoles = $roles->reject(function($role) {
+                    return $role->name === 'Admin';
+                });
+            @endphp
 
-                @foreach($roles as $role)
-                <option value="{{ $role->id }}" 
-                @selected(old('role_id') == $role->id)>
-                    {{ $role->name }}
-                </option>
-                 @endforeach
+            <x-wire-native-select label="Rol" name="role_id">
+                {{-- Opción vacía --}}
+                <option value="" style="color: #9CA3AF;">Seleccionar rol</option>
+                
+                @foreach($availableRoles as $role)
+                    <option value="{{ $role->id }}" 
+                    @selected(old('role_id') == $role->id)>
+                        {{ $role->name }}
+                    </option>
+                @endforeach
             </x-wire-native-select>
+
+
             <div class="flex justify-end">
                 <x-wire-button type="submit" blue>
                     guardar

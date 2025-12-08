@@ -23,6 +23,6 @@ class UserSeeder extends Seeder
          ]);
          
          $user->assignRole('Admin');
-         $user->doctor()->create();
+         //$user->doctor()->create();
     }
 }

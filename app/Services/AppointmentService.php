@@ -35,9 +35,11 @@ class AppointmentService
           ->whereTime('start_time', '<', $hourEnd);
       },
       'appointments'=>function($q) use($date, $hourStart, $hourEnd){
-        $q->whereDate('date', $date)
-          ->whereTime('start_time', '>=', $hourStart)
-          ->whereTime('start_time', '<', $hourEnd);
+        $q->withoutGlobalScopes() // ← AGREGAR ESTO
+      ->whereDate('date', $date)
+      ->whereTime('start_time', '>=', $hourStart)
+      ->whereTime('start_time', '<', $hourEnd)
+      ->where('status', '!=', 'cancelled');
       }
      ])
      ->get();

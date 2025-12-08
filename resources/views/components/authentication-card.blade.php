@@ -1,9 +1,13 @@
-<div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-    <div>
-        {{ $logo }}
+<div class="min-h-screen flex flex-col justify-center items-center">
+    
+    <!-- Logo -->
+    <div class="mb-3">
+        <img src="{{ asset('img/bonito.png') }}" alt="Logo" class="w-56 mx-auto">
     </div>
 
-    <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
+    <!-- Card login -->
+    <div class="w-full max-w-sm mx-4 px-4 py-4 bg-transparent border-2 border-blue-500 shadow-md rounded-lg backdrop-blur-sm">
         {{ $slot }}
     </div>
+
 </div>

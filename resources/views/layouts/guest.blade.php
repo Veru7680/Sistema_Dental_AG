@@ -18,9 +18,16 @@
         @livewireStyles
     </head>
     <body>
-        <div class="font-sans text-gray-900 antialiased">
-            {{ $slot }}
+       <div
+            class="w-full min-h-screen flex items-center justify-center
+                bg-cover bg-center bg-no-repeat p-4"
+            style="background-image: url('{{ asset('img/dentista.jpg') }}');"
+        >
+            <div class="w-full max-w-md">
+                {{ $slot }}
+            </div>
         </div>
+
 
         @livewireScripts
     </body>

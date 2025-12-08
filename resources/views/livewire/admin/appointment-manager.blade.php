@@ -51,7 +51,8 @@
                 wire:click="searchAvailability"
                 class="w-full"
                 color="primary" 
-                :disabled="$appointmentEdit && !$appointmentEdit->status->isEditable()">                    Buscar Disponibilidad
+                :disabled="$appointmentEdit && !$appointmentEdit->status->isEditable()">  
+                 Buscar Disponibilidad
                 </x-wire-button>
              </div>
 
@@ -177,12 +178,20 @@
                         wire:model="appointment.reason" />
                             
                          <x-wire-button 
-                         wire:click="save"
-                         spinner="save"
-                         class="w-full">
-                         Confirmar Cita
-
-                         </x-wire-button>
+    wire:click="save"
+    wire:target="save"
+    wire:loading.attr="disabled"
+    wire:loading.class="opacity-50 cursor-not-allowed"
+    class="w-full">
+    
+    <span wire:loading.remove wire:target="save">
+        Confirmar Cita
+    </span>
+    
+    <span wire:loading wire:target="save">
+        Guardando...
+    </span>
+</x-wire-button>
 
                             
 

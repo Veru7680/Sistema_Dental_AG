@@ -53,27 +53,114 @@
             </x-slot>
 
             <x-tab-content tab="consulta">
-                <div class="space-y-4">
-                    <x-wire-textarea
-                    label="Diagnostico"
-                    placeholder="Describa el diagnostico del paciente aqui..."
-                    wire:model="form.diagnosis"
-                    />
+    <div class="space-y-4">
+        <!-- DIAGNÓSTICO - SELECT -->
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Diagnóstico (Seleccionar)</label>
+            <select wire:model="form.diagnosis" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                <option value="">Seleccione un diagnóstico...</option>
+                
+                <optgroup label="Caries Dental">
+                    <option value="Caries clase I">Caries clase I (surcos y fisuras)</option>
+                    <option value="Caries clase II">Caries clase II (entre dientes posteriores)</option>
+                    <option value="Caries clase III">Caries clase III (entre dientes anteriores)</option>
+                    <option value="Caries clase V">Caries clase V (cuello del diente)</option>
+                    <option value="Caries múltiples">Caries múltiples</option>
+                </optgroup>
+                
+                <optgroup label="Enfermedades de Encías">
+                    <option value="Gingivitis">Gingivitis (encías inflamadas)</option>
+                    <option value="Sarro dental">Sarro dental (cálculo)</option>
+                    <option value="Recesión gingival">Recesión gingival (encías retraídas)</option>
+                </optgroup>
+                
+                <optgroup label="Problemas del Nervio">
+                    <option value="Pulpitis reversible">Pulpitis reversible (dolor que cede)</option>
+                    <option value="Pulpitis irreversible">Pulpitis irreversible (dolor persistente)</option>
+                    <option value="Absceso dental">Absceso dental (infección con pus)</option>
+                </optgroup>
+                
+                <optgroup label="Problemas Comunes">
+                    <option value="Hipersensibilidad dentinaria">Hipersensibilidad dentinaria (sensibilidad)</option>
+                    <option value="Bruxismo">Bruxismo (rechinar dientes)</option>
+                    <option value="Desgaste dental">Desgaste dental</option>
+                    <option value="Halitosis">Halitosis (mal aliento)</option>
+                    <option value="Xerostomía">Xerostomía (boca seca)</option>
+                    <option value="Pericoronaritis">Pericoronaritis (muela del juicio)</option>
+                </optgroup>
 
-                    <x-wire-textarea
-                    label="Tratamiento"
-                    placeholder="Describa el tratamiento del paciente aqui..."
-                    wire:model="form.treatment"
-                    />
+                <optgroup label="Traumatismos">
+                    <option value="Fractura dental">Fractura dental</option>
+                    <option value="Trauma dental">Trauma dental (golpe)</option>
+                </optgroup>
+            </select>
+        </div>
 
-                    <x-wire-textarea
-                    label="Notas"
-                    placeholder="Describa el tratamiento del paciente aqui..."
-                    wire:model="form.notes"
-                    />
-                </div>
+        <!-- DIAGNÓSTICO - CUADRO DE TEXTO MANUAL -->
+        <div>
+            <input 
+                type="text"
+                wire:model="form.diagnosis_manual"
+                placeholder="O escriba el diagnóstico manualmente aquí..."
+                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+            />
+        </div>
 
-            </x-tab-content>
+     
+
+        <!-- TRATAMIENTO - SELECT -->
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Tratamiento (Seleccionar)</label>
+            <select wire:model="form.treatment" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                <option value="">Seleccione un tratamiento...</option>
+                
+                <optgroup label="Tratamientos Más Comunes">
+                    <option value="Obturación composite">Obturación composite (empaste)</option>
+                    <option value="Profilaxis">Profilaxis (limpieza dental)</option>
+                    <option value="Endodoncia">Endodoncia (tratamiento de conducto)</option>
+                    <option value="Exodoncia simple">Exodoncia simple (extracción)</option>
+                    <option value="Aplicación de flúor">Aplicación de flúor</option>
+                    <option value="Pulido dental">Pulido dental</option>
+                </optgroup>
+                
+                <optgroup label="Prótesis y Rehabilitación">
+                    <option value="Corona dental">Corona dental (funda)</option>
+                    <option value="Puente dental">Puente dental</option>
+                    <option value="Prótesis removible">Prótesis removible</option>
+                    <option value="Implante dental">Implante dental</option>
+                </optgroup>
+
+                <optgroup label="Otros Tratamientos">
+                    <option value="Placa de descarga">Placa de descarga (bruxismo)</option>
+                    <option value="Blanqueamiento dental">Blanqueamiento dental</option>
+                    <option value="Curetaje dental">Curetaje dental (limpieza profunda)</option>
+                    <option value="Instrucción de higiene oral">Instrucción de higiene oral</option>
+                    <option value="Control de evolución">Control de evolución</option>
+                    <option value="Prescripción de medicamentos">Prescripción de medicamentos</option>
+                </optgroup>
+            </select>
+        </div>
+
+        <!-- TRATAMIENTO - CUADRO DE TEXTO MANUAL -->
+        <div>
+            <input 
+                type="text"
+                wire:model="form.treatment_manual"
+                placeholder="O escriba el tratamiento manualmente aquí..."
+                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+            />
+        </div>
+
+       
+
+        <!-- NOTAS -->
+        <x-wire-textarea
+            label="Notas Adicionales"
+            placeholder="Observaciones, recomendaciones, evolución, próxima cita..."
+            wire:model="form.notes"
+        />
+    </div>
+</x-tab-content>
 
             <x-tab-content tab="receta">
                 <div class="space-y-4">

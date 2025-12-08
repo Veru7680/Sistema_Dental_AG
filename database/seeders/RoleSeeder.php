@@ -24,7 +24,7 @@ class RoleSeeder extends Seeder
 
                 'create_appointment',
                 'read_appointment',
-                'read_calendar',  
+               
             ],
             'Doctor'=>[
                 'access_dashboard',
@@ -34,7 +34,7 @@ class RoleSeeder extends Seeder
                 'delete_appointment',
                 'update_appointment',
 
-                'read_calendar',  
+                
             ],
             'Recepcionista'=>[
                 'access_dashboard',

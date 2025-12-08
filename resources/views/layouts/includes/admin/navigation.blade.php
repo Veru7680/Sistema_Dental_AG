@@ -9,8 +9,8 @@
             </svg>
          </button>
         <a href="/" class="flex ms-2 md:me-24">
-          <img src="https://flowbite.com/docs/images/logo.svg" class="h-8 me-3" alt="FlowBite Logo" />
-          <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">Flowbite</span>
+          <img src="/img/clini2.png" class="h-8 me-3" alt="Clínica AG Logo" />
+<span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap text-gray-800">Clínica "AG"</span>
         </a>
       </div>
       <div class="flex items-center">
