@@ -91,15 +91,10 @@
                                 </a>
                             @else
                                 <a href="{{ route('login') }}" 
-                                   class="px-5 py-2 text-blue-600 hover:text-blue-800 font-medium transition-colors">
+                                    class="px-5 py-2 bg-purple-500 text-white hover:bg-purple-600 font-medium transition-colors rounded-md">
                                     Iniciar Sesión
                                 </a>
-                                @if (Route::has('register'))
-                                    <a href="{{ route('register') }}" 
-                                        class="px-6 py-2 bg-gradient-to-r from-purple-500 to-purple-600 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all hover:from-purple-600 hover:to-purple-700">
-                                        <i class="fas fa-user-plus mr-2"></i>Registrarse
-                                    </a>
-                                @endif
+                               
                             @endauth
                         @endif
                     </div>
@@ -116,6 +111,10 @@
                     </h2>
                     <p class="text-lg text-gray-600 max-w-3xl mx-auto">
                         Ofrecemos una gama completa de servicios odontológicos con la más alta tecnología
+                    </p>
+                    <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                        Para obtener tu usuario y contraseña de acceso al sistema, debes registrarte llamando a nuestros números 
+                        de atención. Solo así podrás gestionar tus citas y ver tu historial médico en línea.
                     </p>
                 </div>
                 
@@ -168,24 +167,24 @@
                         </ul>
                     </div>
                     
-                    <div class="card-hover bg-gradient-to-r from-blue-600 to-purple-700 rounded-2xl p-8 shadow-lg">
+                    <div class="card-hover bg-gradient-professional rounded-2xl p-8 shadow-lg">
                         <div class="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center mb-6 shadow-md backdrop-blur-sm">
                         <i class="fas fa-hand-holding-medical text-2xl text-purple-600"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-4">Odontología General</h3>
-                            <p class="text-gray-100 mb-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Odontologia General</h3>
+                        <p class="text-gray-700 mb-6">>
                                 Cuidado dental integral para toda la familia con tecnología de vanguardia.
                             </p>
                         <ul class="space-y-2">
-                            <li class="flex items-center text-gray-100">
+                             <li class="flex items-center text-gray-600">
                                  <i class="fas fa-check-circle text-green-500 mr-2"></i>
                                 Limpieza dental
                             </li>
-                            <li class="flex items-center text-gray-100">
+                             <li class="flex items-center text-gray-600">
                                  <i class="fas fa-check-circle text-green-500 mr-2"></i>
                                 Tratamiento de caries
                             </li>
-                            <li class="flex items-center text-gray-100">
+                             <li class="flex items-center text-gray-600">
                                  <i class="fas fa-check-circle text-green-500 mr-2"></i>
                                 Extracciones
                             </li>

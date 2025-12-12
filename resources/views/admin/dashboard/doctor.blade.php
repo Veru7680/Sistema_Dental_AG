@@ -169,10 +169,20 @@
                                     ⚠️ Pasó la hora
                                 </p>
                             </div>
-                            <a href="{{ route('admin.appointments.consultation', $appointment) }}" 
-                            class="text-xs bg-red-500 text-white px-1.5 py-0.5 rounded hover:bg-red-600 transition-colors">
-                                Gestionar
-                            </a>
+                           <div class="flex flex-col space-y-2 w-20">
+    <a href="{{ route('admin.appointments.consultation', $appointment) }}" 
+       class="flex items-center justify-center text-xs bg-red-500 text-white px-2 py-1.5 rounded hover:bg-red-600 transition-colors">
+        <i class="fa-solid fa-stethoscope mr-1"></i>
+        Gestionar
+    </a>
+    
+    <a href="{{ route('admin.appointments.consultation', $appointment) }}" 
+       class="flex items-center justify-center text-xs bg-blue-500 text-white px-2 py-1.5 rounded hover:bg-blue-600 transition-colors">
+        <i class="fa-solid fa-pen-to-square mr-1"></i>
+        Editar
+    </a>
+</div>
+                            
                         </div>
                     </div>
                 @empty

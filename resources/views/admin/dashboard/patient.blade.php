@@ -224,17 +224,7 @@
                                         </span>
                                     </div>
                                 </td>
-                                <td class="py-2">
-                                    @if($appointment->status == 2)
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs bg-green-100 text-green-800">
-                                            ✅
-                                        </span>
-                                    @else
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs bg-red-100 text-red-800">
-                                            ❌
-                                        </span>
-                                    @endif
-                                </td>
+                               
                                 <td class="py-2 text-right">
                                     <a href="{{ route('admin.appointments.show', $appointment) }}" 
                                        class="text-blue-600 hover:text-blue-800 text-xs">
