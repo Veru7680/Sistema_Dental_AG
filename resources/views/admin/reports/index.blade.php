@@ -45,22 +45,19 @@
                             </div>
                             <input type="hidden" name="requested_by" value="{{ auth()->user()->id }}">
                         </div>
-                        
+
                         <!-- Selector de otro usuario (dinámico según rol) -->
                         <div class="flex-1">
                             <select name="filter_user" class="w-full p-2.5 text-sm border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
-                                <option value="">-- Buscar por otro usuario --</option>
-                                <option value="{{ auth()->user()->id }}" {{ request('filter_user') == auth()->id() ? 'selected' : '' }}>
-                                    Yo mismo ({{ auth()->user()->name }})
-                                </option>
-                                
+                                <option value="">-- Buscar por otro usuario --</option>                                
+
                                 @php
                                     $currentUser = auth()->user();
                                     $isPatient = $currentUser->hasRole('Paciente');
                                     $isDoctor = $currentUser->hasRole('Doctor');
                                     $isAdminOrReceptionist = $currentUser->hasRole(['Admin', 'Recepcionista']);
                                 @endphp
-                                
+
                                 @if($isPatient && isset($usersForFilter))
                                     <!-- Paciente: solo ve doctores que le han atendido -->
                                     <optgroup label="👨‍⚕️ Mis Doctores">
@@ -72,7 +69,7 @@
                                             @endif
                                         @endforeach
                                     </optgroup>
-                                    
+
                                 @elseif($isDoctor && isset($usersForFilter))
                                     <!-- Doctor: solo ve sus pacientes -->
                                     <optgroup label="👤 Mis Pacientes">
@@ -84,7 +81,7 @@
                                             @endif
                                         @endforeach
                                     </optgroup>
-                                    
+
                                 @elseif($isAdminOrReceptionist && isset($usersForFilter))
                                     <!-- Admin/Recepcionista: ve TODOS los usuarios -->
                                     <optgroup label="👨‍⚕️ Doctores">
@@ -94,7 +91,7 @@
                                             </option>
                                         @endforeach
                                     </optgroup>
-                                    
+
                                     <optgroup label="👤 Pacientes">
                                         @foreach($usersForFilter->filter(function($u) { return $u->hasRole('Paciente'); }) as $patientUser)
                                             <option value="{{ $patientUser->id }}" {{ request('filter_user') == $patientUser->id ? 'selected' : '' }}>
@@ -102,7 +99,7 @@
                                             </option>
                                         @endforeach
                                     </optgroup>
-                                    
+
                                     <optgroup label="👥 Otros Roles">
                                         @foreach($usersForFilter->filter(function($u) { return !$u->hasRole('Doctor') && !$u->hasRole('Paciente'); }) as $otherUser)
                                             @php
@@ -134,7 +131,7 @@
                                 <option value="range" {{ request('period_type') == 'range' ? 'selected' : '' }}>Rango Personalizado</option>
                             </select>
                         </div>
-                        
+
                         <!-- Selectores dinámicos -->
                         <div id="monthSelector" class="period-selector">
                             <select name="filter_month" class="w-full p-2.5 text-sm border border-gray-300 rounded-lg">
@@ -146,7 +143,7 @@
                                 @endfor
                             </select>
                         </div>
-                        
+
                         <div id="yearSelector" class="period-selector">
                             <select name="filter_year" class="w-full p-2.5 text-sm border border-gray-300 rounded-lg">
                                 <option value="">Seleccionar año</option>
@@ -157,21 +154,21 @@
                                 @endfor
                             </select>
                         </div>
-                        
+
                         <!-- Selector de semana -->
                         <div id="weekSelector" class="period-selector hidden">
                             <input type="week" name="filter_week" 
                                    value="{{ request('filter_week', date('Y-\WW')) }}"
                                    class="w-full p-2.5 text-sm border border-gray-300 rounded-lg">
                         </div>
-                        
+
                         <!-- Selector de día -->
                         <div id="daySelector" class="period-selector hidden">
                             <input type="date" name="filter_day" 
                                    value="{{ request('filter_day', date('Y-m-d')) }}"
                                    class="w-full p-2.5 text-sm border border-gray-300 rounded-lg">
                         </div>
-                        
+
                         <!-- Rango de fechas -->
                         <div id="rangeSelector" class="period-selector hidden md:col-span-2">
                             <div class="grid grid-cols-2 gap-2">
@@ -196,7 +193,7 @@
                             $hasDateFilter = request()->anyFilled(['filter_month', 'filter_year', 'filter_week', 'filter_day', 'start_date']);
                             $periodType = request('period_type', 'month');
                         @endphp
-                        
+
                         @if($hasDateFilter)
                             <span class="font-medium">Filtros aplicados:</span>
                             @if($periodType === 'month' && request('filter_month') && request('filter_year'))
@@ -216,7 +213,7 @@
                             @elseif($periodType === 'range' && request('start_date') && request('end_date'))
                                 {{ \Carbon\Carbon::parse(request('start_date'))->isoFormat('DD/MM/YYYY') }} al {{ \Carbon\Carbon::parse(request('end_date'))->isoFormat('DD/MM/YYYY') }}
                             @endif
-                            
+
                             @if(request('filter_user') && request('filter_user') != auth()->id())
                                 @php
                                     $selectedUser = \App\Models\User::find(request('filter_user'));
@@ -233,7 +230,7 @@
                             @endif
                         @endif
                     </div>
-                    
+
                     <!-- Botones -->
                     <div class="flex space-x-2">
                         <button type="submit" 
@@ -243,7 +240,7 @@
                             </svg>
                             Aplicar Filtros
                         </button>
-                        
+
                         <a href="{{ route('admin.reports.index') }}" 
                            class="px-4 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg focus:outline-none flex items-center">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -253,26 +250,25 @@
                         </a>
 
                         <a href="{{ route('admin.reports.export.pdf-view', request()->query()) }}"
-   class="px-4 py-2.5 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-lg focus:ring-4 focus:ring-green-300 focus:outline-none flex items-center"
-   target="_blank">
-    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-    </svg>
-    Ver PDF
-</a>
+                           class="px-4 py-2.5 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-lg focus:ring-4 focus:ring-green-300 focus:outline-none flex items-center"
+                           target="_blank">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                            </svg>
+                            Ver PDF
+                        </a>
 
-<!-- Botón DESCARGAR PDF -->
-<a href="{{ route('admin.reports.export.pdf-download', request()->query()) }}"
-   class="px-4 py-2.5 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg focus:ring-4 focus:ring-red-300 focus:outline-none flex items-center">
-    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-              d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-    </svg>
-    Descargar PDF
-</a>
+                        <a href="{{ route('admin.reports.export.pdf-download', request()->query()) }}"
+                           class="px-4 py-2.5 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg focus:ring-4 focus:ring-red-300 focus:outline-none flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                      d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                            Descargar PDF
+                        </a>
                     </div>
                 </div>
             </div>
@@ -288,7 +284,7 @@
                         <span class="text-gray-500">(con filtros aplicados)</span>
                     @endif
                 </div>
-                
+
                 <div class="relative w-full md:w-64">
                     <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                         <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -323,7 +319,7 @@
                             <td class="px-4 py-3 font-mono text-gray-600">
                                 #{{ str_pad($consulta->id, 3, '0', STR_PAD_LEFT) }}
                             </td>
-                            
+
                             <!-- Paciente -->
                             <td class="px-4 py-3">
                                 <div class="font-medium text-gray-900">{{ $consulta->appointment->patient->user->name ?? 'N/A' }}</div>
@@ -331,7 +327,7 @@
                                     Cita #{{ $consulta->appointment_id }}
                                 </div>
                             </td>
-                            
+
                             <!-- Doctor -->
                             <td class="px-4 py-3">
                                 <div class="font-medium">{{ $consulta->appointment->doctor->user->name ?? 'N/A' }}</div>
@@ -339,7 +335,7 @@
                                     {{ $consulta->appointment->doctor->specialty ?? 'Especialista' }}
                                 </div>
                             </td>
-                            
+
                             <!-- Fecha de la cita -->
                             <td class="px-4 py-3">
                                 @if($consulta->appointment && $consulta->appointment->date)
@@ -351,7 +347,7 @@
                                     <span class="text-gray-400">N/A</span>
                                 @endif
                             </td>
-                            
+
                             <!-- Horario -->
                             <td class="px-4 py-3">
                                 @if($consulta->appointment && $consulta->appointment->start_time)
@@ -373,7 +369,7 @@
                                     <span class="text-gray-400">N/A</span>
                                 @endif
                             </td>
-                            
+
                             <!-- Diagnóstico -->
                             <td class="px-4 py-3 max-w-xs">
                                 @if($consulta->diagnosis)
@@ -389,7 +385,7 @@
                                     <span class="text-gray-400">Sin diagnóstico</span>
                                 @endif
                             </td>
-                            
+
                             <!-- Tratamiento -->
                             <td class="px-4 py-3 max-w-xs">
                                 @if($consulta->treatment)
@@ -405,7 +401,7 @@
                                     <span class="text-gray-400">Sin tratamiento</span>
                                 @endif
                             </td>
-                            
+
                             <!-- Fecha Consulta -->
                             <td class="px-4 py-3">
                                 <div class="text-sm font-medium">{{ $consulta->created_at->format('d/m/Y') }}</div>
@@ -416,7 +412,7 @@
                     </tbody>
                 </table>
             </div>
-            
+
             <!-- Mostrar si no hay datos -->
             @else
             <div class="text-center py-8 text-gray-500 bg-white">
@@ -429,7 +425,7 @@
                 <p class="text-sm text-gray-500">Intenta cambiar los criterios de búsqueda o <a href="{{ route('admin.reports.index') }}" class="text-blue-600 hover:underline">limpiar los filtros</a></p>
             </div>
             @endif
-            
+
             <!-- Paginación -->
             @if($consultations->hasPages())
             <div class="flex flex-col md:flex-row items-center justify-between p-4 border-t border-gray-200 gap-3">
@@ -442,7 +438,7 @@
                     @else
                     <a href="{{ $consultations->previousPageUrl() }}" class="px-3 py-1 text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg">Anterior</a>
                     @endif
-                    
+
                     @if($consultations->hasMorePages())
                     <a href="{{ $consultations->nextPageUrl() }}" class="px-3 py-1 text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg">Siguiente</a>
                     @else
