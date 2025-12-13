@@ -8,7 +8,7 @@ use App\Http\Controllers\Admin\DoctorController;
 use App\Http\Controllers\Admin\AppointmentController;
 use App\Http\Controllers\Admin\CalendarController;
 use App\Http\Controllers\Admin\DashboardController;
-
+use App\Http\Controllers\Admin\ReportController;
 
 Route::get ('/',[DashboardController::class, 'index'])->name('dashboard');
 //gestion de Roles
@@ -27,3 +27,5 @@ Route::resource('appointments', AppointmentController::class);
 
 Route::get('calendar', [CalendarController::class, 'index'])
 ->name('calendar.index');
+
+Route::resource('reports', ReportController::class);

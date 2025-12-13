@@ -80,7 +80,12 @@
         ],
     ],
 
-  
-   
+    [   'type' => 'link',
+        'title' => 'Reportes',
+        'icon' => 'fa-solid fa-chart-line', 
+        'route' => 'admin.reports.index', 
+        'active' => 'admin.reports.*', 
+        
+    ],
     
 ];
