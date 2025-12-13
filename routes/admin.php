@@ -28,4 +28,16 @@ Route::resource('appointments', AppointmentController::class);
 Route::get('calendar', [CalendarController::class, 'index'])
 ->name('calendar.index');
 
+// RUTAS EXISTENTES (NO MODIFICAR)
 Route::resource('reports', ReportController::class);
+Route::get('reports/export/pdf', [ReportController::class, 'exportToPdf'])
+       ->name('reports.export.pdf');
+
+// ========== RUTAS NUEVAS PARA PDF ==========
+// Para VER PDF en navegador
+Route::get('reports/export/pdf-view', [ReportController::class, 'viewPdf'])
+       ->name('reports.export.pdf-view');
+
+// Para DESCARGAR PDF
+Route::get('reports/export/pdf-download', [ReportController::class, 'downloadPdf'])
+       ->name('reports.export.pdf-download');
