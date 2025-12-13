@@ -5,16 +5,18 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Consultation;
-use App\Models\Patient;
-use App\Models\Doctor;
+use App\Models\User;
+use Carbon\Carbon;
 
 class ReportController extends Controller
 {
     public function index(Request $request)
     {
-        // 1. Obtener datos para los filtros
-        $patients = Patient::with('user')->get();
-        $doctors = Doctor::with('user')->get();
+        $currentUser = auth()->user();
+        $currentUserId = $currentUser->id;
+        
+        // 1. Obtener usuarios según rol
+        $usersForFilter = $this->getUsersForFilter($currentUser);
         
         // 2. Consulta base
         $query = Consultation::with([
@@ -22,37 +24,54 @@ class ReportController extends Controller
             'appointment.doctor.user'
         ]);
         
-        // 3. FILTRO: Por usuario que solicita (si se seleccionó)
-        // COMENTADO porque no tienes columna 'created_by'
-        // if ($request->filled('filter_user')) {
-        //     $query->where('created_by', $request->filter_user); // ESTA LÍNEA CAUSA EL ERROR
-        // }
-        
-        // Si quieres filtrar por usuario, necesitas definir cómo:
-        // Opción A: Si quieres filtrar por usuario que CREÓ la consulta
-        // Primero asegúrate de que tu tabla consultations tenga columna 'user_id' o 'created_by'
-        
-        // Opción B: Filtrar por usuario relacionado con paciente/doctor
-        if ($request->filled('filter_user')) {
-            $userId = $request->filter_user;
-            
-            $query->where(function($q) use ($userId) {
-                // Filtrar por paciente relacionado
-                $q->whereHas('appointment.patient.user', function($q) use ($userId) {
-                    $q->where('id', $userId);
-                })
-                // O filtrar por doctor relacionado
-                ->orWhereHas('appointment.doctor.user', function($q) use ($userId) {
-                    $q->where('id', $userId);
-                });
+        // 3. RESTRICCIONES POR ROL desde el inicio
+        if ($currentUser->hasRole('Paciente')) {
+            // Paciente solo ve SUS consultas
+            $query->whereHas('appointment.patient.user', function($q) use ($currentUserId) {
+                $q->where('id', $currentUserId);
             });
         }
+        elseif ($currentUser->hasRole('Doctor')) {
+            // Doctor solo ve SUS consultas
+            $query->whereHas('appointment.doctor.user', function($q) use ($currentUserId) {
+                $q->where('id', $currentUserId);
+            });
+        }
+        // Admin/Recepcionista no tiene restricciones iniciales
         
-        // 4. FILTROS POR PERIODO
+        // 4. FILTRO ADICIONAL por usuario seleccionado
+        if ($request->filled('filter_user')) {
+            $filteredUserId = $request->filter_user;
+            
+            if ($currentUser->hasRole('Paciente')) {
+                // Paciente filtra por doctor específico
+                $query->whereHas('appointment.doctor.user', function($q) use ($filteredUserId) {
+                    $q->where('id', $filteredUserId);
+                });
+            }
+            elseif ($currentUser->hasRole('Doctor')) {
+                // Doctor filtra por paciente específico (sus propios pacientes)
+                $query->whereHas('appointment.patient.user', function($q) use ($filteredUserId) {
+                    $q->where('id', $filteredUserId);
+                });
+            }
+            elseif ($currentUser->hasRole(['admin', 'Recepcionista'])) {
+                // Admin/Recepcionista filtra por cualquier usuario
+                $query->where(function($q) use ($filteredUserId) {
+                    $q->whereHas('appointment.patient.user', function($q) use ($filteredUserId) {
+                        $q->where('id', $filteredUserId);
+                    })->orWhereHas('appointment.doctor.user', function($q) use ($filteredUserId) {
+                        $q->where('id', $filteredUserId);
+                    });
+                });
+            }
+        }
+        
+        // 5. FILTROS POR PERIODO
         $periodType = $request->get('period_type', 'month');
         
         if ($periodType === 'month') {
-            // Usar valores por defecto si no se especifican
+            // Usar valores por defecto o los enviados
             $month = $request->filled('filter_month') ? $request->filter_month : date('n');
             $year = $request->filled('filter_year') ? $request->filter_year : date('Y');
             
@@ -76,6 +95,7 @@ class ReportController extends Controller
             }
         }
         elseif ($periodType === 'day' && $request->filled('filter_day')) {
+            // Filtro por día específico
             $query->whereHas('appointment', function($q) use ($request) {
                 $q->whereDate('date', $request->filter_day);
             });
@@ -85,8 +105,16 @@ class ReportController extends Controller
                 $q->whereBetween('date', [$request->start_date, $request->end_date]);
             });
         }
+        // Si no hay filtro de fecha y es paciente/doctor, mostrar últimos 30 días
+        elseif (!$request->anyFilled(['filter_month', 'filter_week', 'filter_day', 'start_date'])) {
+            if ($currentUser->hasRole(['Paciente', 'Doctor'])) {
+                $query->whereHas('appointment', function($q) {
+                    $q->where('date', '>=', Carbon::now()->subDays(30));
+                });
+            }
+        }
         
-        // 5. FILTRO: Por búsqueda de texto
+        // 6. FILTRO de búsqueda
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
@@ -101,13 +129,70 @@ class ReportController extends Controller
             });
         }
         
-        // 6. Paginar resultados
+        // 7. Paginación
         $consultations = $query->orderBy('created_at', 'desc')
                                ->paginate(15)
                                ->appends($request->query());
         
-        // 7. Pasar a la vista
-        return view('admin.reports.index', compact('consultations', 'patients', 'doctors'));
+        // 8. Retornar vista
+        return view('admin.reports.index', compact(
+            'consultations', 
+            'usersForFilter'
+        ));
+    }
+    
+    /**
+     * Obtener usuarios para el filtro según el rol del usuario actual
+     */
+    private function getUsersForFilter($currentUser)
+    {
+        // Todos los usuarios excepto el actual
+        $allUsers = User::where('id', '!=', $currentUser->id)
+                       ->orderBy('name')
+                       ->get();
+        
+        // Para Admin/Recepcionista: todos los usuarios
+        if ($currentUser->hasRole(['admin', 'Recepcionista'])) {
+            return $allUsers;
+        }
+        
+        // Para Paciente: solo doctores que le han atendido
+        if ($currentUser->hasRole('Paciente')) {
+            return $allUsers->filter(function($user) use ($currentUser) {
+                if (!$user->hasRole('Doctor')) {
+                    return false;
+                }
+                
+                // Verificar si este doctor ha atendido al paciente
+                return Consultation::whereHas('appointment', function($q) use ($currentUser, $user) {
+                    $q->whereHas('patient.user', function($q) use ($currentUser) {
+                        $q->where('id', $currentUser->id);
+                    })->whereHas('doctor.user', function($q) use ($user) {
+                        $q->where('id', $user->id);
+                    });
+                })->exists();
+            });
+        }
+        
+        // Para Doctor: solo sus pacientes
+        if ($currentUser->hasRole('Doctor')) {
+            return $allUsers->filter(function($user) use ($currentUser) {
+                if (!$user->hasRole('Paciente')) {
+                    return false;
+                }
+                
+                // Verificar si este paciente ha sido atendido por el doctor
+                return Consultation::whereHas('appointment', function($q) use ($currentUser, $user) {
+                    $q->whereHas('doctor.user', function($q) use ($currentUser) {
+                        $q->where('id', $currentUser->id);
+                    })->whereHas('patient.user', function($q) use ($user) {
+                        $q->where('id', $user->id);
+                    });
+                })->exists();
+            });
+        }
+        
+        return collect(); // Por defecto, colección vacía
     }
     
     public function export(Request $request)
