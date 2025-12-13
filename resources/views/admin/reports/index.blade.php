@@ -58,7 +58,7 @@
                                     $currentUser = auth()->user();
                                     $isPatient = $currentUser->hasRole('Paciente');
                                     $isDoctor = $currentUser->hasRole('Doctor');
-                                    $isAdminOrReceptionist = $currentUser->hasRole(['admin', 'Recepcionista']);
+                                    $isAdminOrReceptionist = $currentUser->hasRole(['Admin', 'Recepcionista']);
                                 @endphp
                                 
                                 @if($isPatient && isset($usersForFilter))

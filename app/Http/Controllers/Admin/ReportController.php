@@ -141,59 +141,60 @@ class ReportController extends Controller
         ));
     }
     
-    /**
-     * Obtener usuarios para el filtro según el rol del usuario actual
-     */
-    private function getUsersForFilter($currentUser)
-    {
-        // Todos los usuarios excepto el actual
-        $allUsers = User::where('id', '!=', $currentUser->id)
-                       ->orderBy('name')
-                       ->get();
-        
-        // Para Admin/Recepcionista: todos los usuarios
-        if ($currentUser->hasRole(['admin', 'Recepcionista'])) {
-            return $allUsers;
+   /**
+ * Obtener usuarios para el filtro según el rol del usuario actual
+ */
+        private function getUsersForFilter($currentUser)
+        {
+            // Todos los usuarios excepto el actual
+            $allUsers = User::where('id', '!=', $currentUser->id)
+                        ->orderBy('name')
+                        ->get();
+            
+            // Para Admin/Recepcionista: todos los usuarios
+            // NOTA: 'Admin' con A mayúscula, 'Recepcionista' con R mayúscula
+            if ($currentUser->hasRole(['Admin', 'Recepcionista'])) {
+                return $allUsers;
+            }
+            
+            // Para Paciente: solo doctores que le han atendido
+            if ($currentUser->hasRole('Paciente')) {
+                return $allUsers->filter(function($user) use ($currentUser) {
+                    if (!$user->hasRole('Doctor')) {
+                        return false;
+                    }
+                    
+                    // Verificar si este doctor ha atendido al paciente
+                    return Consultation::whereHas('appointment', function($q) use ($currentUser, $user) {
+                        $q->whereHas('patient.user', function($q) use ($currentUser) {
+                            $q->where('id', $currentUser->id);
+                        })->whereHas('doctor.user', function($q) use ($user) {
+                            $q->where('id', $user->id);
+                        });
+                    })->exists();
+                });
+            }
+            
+            // Para Doctor: solo sus pacientes
+            if ($currentUser->hasRole('Doctor')) {
+                return $allUsers->filter(function($user) use ($currentUser) {
+                    if (!$user->hasRole('Paciente')) {
+                        return false;
+                    }
+                    
+                    // Verificar si este paciente ha sido atendido por el doctor
+                    return Consultation::whereHas('appointment', function($q) use ($currentUser, $user) {
+                        $q->whereHas('doctor.user', function($q) use ($currentUser) {
+                            $q->where('id', $currentUser->id);
+                        })->whereHas('patient.user', function($q) use ($user) {
+                            $q->where('id', $user->id);
+                        });
+                    })->exists();
+                });
+            }
+            
+            return collect(); // Por defecto, colección vacía
         }
-        
-        // Para Paciente: solo doctores que le han atendido
-        if ($currentUser->hasRole('Paciente')) {
-            return $allUsers->filter(function($user) use ($currentUser) {
-                if (!$user->hasRole('Doctor')) {
-                    return false;
-                }
-                
-                // Verificar si este doctor ha atendido al paciente
-                return Consultation::whereHas('appointment', function($q) use ($currentUser, $user) {
-                    $q->whereHas('patient.user', function($q) use ($currentUser) {
-                        $q->where('id', $currentUser->id);
-                    })->whereHas('doctor.user', function($q) use ($user) {
-                        $q->where('id', $user->id);
-                    });
-                })->exists();
-            });
-        }
-        
-        // Para Doctor: solo sus pacientes
-        if ($currentUser->hasRole('Doctor')) {
-            return $allUsers->filter(function($user) use ($currentUser) {
-                if (!$user->hasRole('Paciente')) {
-                    return false;
-                }
-                
-                // Verificar si este paciente ha sido atendido por el doctor
-                return Consultation::whereHas('appointment', function($q) use ($currentUser, $user) {
-                    $q->whereHas('doctor.user', function($q) use ($currentUser) {
-                        $q->where('id', $currentUser->id);
-                    })->whereHas('patient.user', function($q) use ($user) {
-                        $q->where('id', $user->id);
-                    });
-                })->exists();
-            });
-        }
-        
-        return collect(); // Por defecto, colección vacía
-    }
     
     public function export(Request $request)
     {
