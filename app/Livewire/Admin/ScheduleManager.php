@@ -88,8 +88,8 @@ public $intervals;
 
         $this->dispatch('swal',[
             'icon'=>'success',
-            'title'=>'Hoarario Actualizado',
-            'text'=>'El horario del Doctor ha Siso actualizado',
+            'title'=>'Horario Actualizado',
+            'text'=>'El horario del Doctor ha sido actualizado',
         ]);
     }
 

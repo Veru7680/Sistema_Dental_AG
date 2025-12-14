@@ -11,6 +11,7 @@ class Consultation extends Model
         'diagnosis',
         'treatment',
         'notes',
+        'service_cost', // <-- AÑADE ESTA LÍNEA
         'prescriptions'
 
     ];
@@ -18,6 +19,7 @@ class Consultation extends Model
     protected $casts =[
        
         'prescriptions' => 'array',
+         'service_cost' => 'decimal:2', // <-- AÑADE ESTA LÍNEA PARA FORMATEO AUTOMÁTICO
 
     ];
 

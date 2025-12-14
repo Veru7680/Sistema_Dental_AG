@@ -21,6 +21,7 @@ class ConsultationManager extends Component
         'diagnosis' => '',
         'treatment' => '', 
             'notes' => '',
+            'service_cost' => '',
      'prescriptions' => [],
     ];
 
@@ -31,7 +32,8 @@ class ConsultationManager extends Component
         $this->form = [     
             'diagnosis' => $this->consultation->diagnosis,
             'treatment' => $this->consultation->treatment,
-                'notes' => $this->consultation->notes,
+            'notes' => $this->consultation->notes,
+            'service_cost' => $this->consultation->service_cost, // <-- AÑADE ESTA LÍNEA
             'prescriptions' =>$this->consultation->prescriptions ?? [
             [
                 'medicine' => '',
@@ -69,6 +71,7 @@ class ConsultationManager extends Component
             'form.diagnosis' => 'required|string|max:255',
             'form.treatment' => 'required|string|max:255',
             'form.notes' => 'nullable|string|max:1000',
+            'form.service_cost' => 'nullable|numeric|min:0|max:99999999.99', // <-- AÑADE ESTA LÍNEA
             'form.prescriptions' => 'required|array|min:1',
             'form.prescriptions.*.medicine' => 'required|string|max:255',
             'form.prescriptions.*.dosage' => 'required|string|max:255',

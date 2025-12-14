@@ -172,16 +172,6 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        <!-- BOTONES DE ACCIÓN -->
-                        <div class="flex justify-end space-x-3 pt-4 border-t">
-                            <x-wire-button outline gray sm>
-                                <i class="fa-solid fa-print mr-2"></i>Imprimir Información
-                            </x-wire-button>
-                            <x-wire-button blue sm>
-                                <i class="fa-solid fa-pen-to-square mr-2"></i>Editar Información
-                            </x-wire-button>
-                        </div>
                     </div>
                 </x-tab-content>
 
@@ -228,6 +218,22 @@
                                 rows="3"
                             ></textarea>
                             @error('form.notes') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        </div>
+
+                          <!-- COSTO DE SERVICIO -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Costo de Servicio ($)</label>
+                            <input 
+                                type="number"
+                                wire:model="form.service_cost"
+                                placeholder="0.00"
+                                min="0"
+                                step="0.01"
+                                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                            />
+                            @error('form.service_cost') 
+                                <span class="text-red-500 text-sm">{{ $message }}</span> 
+                            @enderror
                         </div>
                     </div>
                 </x-tab-content>

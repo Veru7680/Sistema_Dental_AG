@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('treatment')->nullable();
             $table->text('notes')->nullable();
             $table->json('prescriptions')->nullable();
+            $table->decimal('service_cost', 10, 2)->nullable(); // NUEVA COLUMNA
 
             $table->timestamps();
         });

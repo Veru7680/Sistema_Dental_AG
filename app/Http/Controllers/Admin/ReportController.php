@@ -304,7 +304,7 @@ class ReportController extends Controller
             if ($month && $year) {
                 $query->whereHas('appointment', function($q) use ($month, $year) {
                     $q->whereMonth('date', $month)
-                      ->whereYear('date', $year);
+                    ->whereYear('date', $year);
                 });
             }
         }
@@ -316,7 +316,7 @@ class ReportController extends Controller
                 
                 $query->whereHas('appointment', function($q) use ($year, $week) {
                     $q->whereYear('date', $year)
-                      ->whereRaw('WEEK(date, 1) = ?', [$week]);
+                    ->whereRaw('WEEK(date, 1) = ?', [$week]);
                 });
             }
         }
@@ -335,15 +335,18 @@ class ReportController extends Controller
             $search = $request->search;
             $query->where(function($q) use ($search) {
                 $q->where('diagnosis', 'like', "%{$search}%")
-                  ->orWhere('treatment', 'like', "%{$search}%")
-                  ->orWhereHas('appointment.patient.user', function($q) use ($search) {
-                      $q->where('name', 'like', "%{$search}%");
-                  })
-                  ->orWhereHas('appointment.doctor.user', function($q) use ($search) {
-                      $q->where('name', 'like', "%{$search}%");
-                  });
+                ->orWhere('treatment', 'like', "%{$search}%")
+                ->orWhereHas('appointment.patient.user', function($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%");
+                })
+                ->orWhereHas('appointment.doctor.user', function($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%");
+                });
             });
         }
+        
+        // SOLO ESTA LÍNEA DEBE QUEDAR, ELIMINA LA DUPLICADA
+        // $query = Consultation::with([...])->select('*'); // ¡ELIMINA ESTA LÍNEA!
         
         return $query->orderBy('created_at', 'desc')->get();
     }

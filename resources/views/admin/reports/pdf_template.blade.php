@@ -19,7 +19,6 @@
             background: #ffffff;
         }
         
-        /* Encabezado simplificado */
         .header {
             text-align: center;
             padding: 8px 0;
@@ -55,7 +54,6 @@
             color: #555555;
         }
         
-        /* Sección de información */
         .info-section {
             background: #f5f5f5;
             padding: 8px;
@@ -154,6 +152,11 @@
             text-align: center;
         }
         
+        /* SOLO ESTA PARTE NUEVA para la columna de costo */
+        .cost-cell {
+            text-align: right;
+        }
+        
         /* Pie de página */
         .footer {
             text-align: center;
@@ -193,10 +196,6 @@
             <div class="stat-label">Total de Consultas</div>
             <div class="stat-value">{{ $total ?? 0 }}</div>
         </div>
-        <div class="stat-item">
-            <div class="stat-label">Período del Reporte</div>
-            <div class="stat-value">Diciembre 2025</div>
-        </div>
     </div>
     
     @if(!empty($filters) && count($filters) > 0)
@@ -221,11 +220,12 @@
         <thead>
             <tr>
                 <th width="5%">ID</th>
-                <th width="20%">Paciente</th>
-                <th width="20%">Doctor</th>
-                <th width="15%">Fecha Cita</th>
-                <th width="20%">Diagnóstico</th>
-                <th width="20%">Tratamiento</th>
+                <th width="18%">Paciente</th>
+                <th width="18%">Doctor</th>
+                <th width="12%">Fecha Cita</th>
+                <th width="18%">Diagnóstico</th>
+                <th width="18%">Tratamiento</th>
+                <th width="11%">Costo ($)</th> <!-- SOLO ESTA COLUMNA NUEVA -->
             </tr>
         </thead>
         <tbody>
@@ -250,13 +250,17 @@
                 </td>
                 <td>{{ $consulta->diagnosis ?? 'Sin diagnóstico' }}</td>
                 <td>{{ $consulta->treatment ?? 'Sin tratamiento' }}</td>
+                <!-- SOLO ESTA CELDA NUEVA -->
+                <td class="cost-cell">
+                    $ {{ number_format($consulta->service_cost ?? 0, 2) }}
+                </td>
             </tr>
             @endforeach
         </tbody>
     </table>
 </div>
 
-<!-- Resumen -->
+<!-- Resumen (sin cambios) -->
 <div class="info-section">
     <h3 class="section-title">RESUMEN</h3>
     <p style="font-size: 8px; margin: 0;">
