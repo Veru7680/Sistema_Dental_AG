@@ -176,7 +176,7 @@
         Gestionar
     </a>
     
-    <a href="{{ route('admin.appointments.consultation', $appointment) }}" 
+    <a href="{{ route('admin.appointments.edit', $appointment) }}" 
        class="flex items-center justify-center text-xs bg-blue-500 text-white px-2 py-1.5 rounded hover:bg-blue-600 transition-colors">
         <i class="fa-solid fa-pen-to-square mr-1"></i>
         Editar
