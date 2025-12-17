@@ -235,24 +235,10 @@
                                         </a>
                                         
                                         <!-- Botón Restaurar -->
-                                        <button 
-                                            type="button"
-                                            class="inline-flex items-center px-4 py-2 bg-emerald-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-emerald-700 active:bg-emerald-900 focus:outline-none focus:border-emerald-900 focus:ring focus:ring-emerald-300 disabled:opacity-25 transition restore-btn"
-                                            data-id="{{ $backup->id }}"
-                                            title="Restaurar este backup">
-                                            <i class="fas fa-history mr-2"></i>
-                                            Restaurar
-                                        </button>
+                                    
                                         
                                         <!-- Botón Eliminar -->
-                                        <button 
-                                            type="button"
-                                            class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 active:bg-red-900 focus:outline-none focus:border-red-900 focus:ring focus:ring-red-300 disabled:opacity-25 transition delete-btn"
-                                            data-id="{{ $backup->id }}"
-                                            title="Eliminar este backup">
-                                            <i class="fas fa-trash-alt mr-2"></i>
-                                            Eliminar
-                                        </button>
+                                      
                                     </div>
                                 </div>
                             </div>
@@ -271,13 +257,7 @@
                             Crea tu primera copia de seguridad para proteger los datos importantes del sistema.
                         </p>
                         
-                        <button 
-                            type="button"
-                            id="firstBackupBtn"
-                            class="inline-flex items-center px-5 py-2.5 bg-blue-600 border border-transparent rounded-lg font-semibold text-sm text-white uppercase tracking-widest hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900 focus:ring focus:ring-blue-300 disabled:opacity-25 transition">
-                            <i class="fas fa-plus-circle mr-2"></i>
-                            Crear Primer Backup
-                        </button>
+                       
                     </div>
                 @endif
             </div>

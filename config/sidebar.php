@@ -94,6 +94,7 @@
     'icon' => 'fa-solid fa-database', // Icono más apropiado para backups
     'route' => 'admin.backups.index', 
     'active' => 'admin.backups.*', 
+     'can' => ['role:admin'],
 ],
     
 ];
