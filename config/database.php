@@ -61,6 +61,14 @@ return [
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
+
+   'dump' => [
+        'dump_binary_path' => env('MYSQLDUMP_PATH', 'C:\xampp\mysql\bin'), // Ruta para Windows XAMPP
+        'use_single_transaction' => true,
+        'timeout' => 300, // 5 minutos
+        // Si el error persiste, prueba comentando exclude_tables:
+        // 'exclude_tables' => [],
+    ],
         ],
 
         'mariadb' => [

@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\AppointmentController;
 use App\Http\Controllers\Admin\CalendarController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Admin\BackupController;
 
 Route::get ('/',[DashboardController::class, 'index'])->name('dashboard');
 //gestion de Roles
@@ -41,3 +42,13 @@ Route::get('reports/export/pdf-view', [ReportController::class, 'viewPdf'])
 // Para DESCARGAR PDF
 Route::get('reports/export/pdf-download', [ReportController::class, 'downloadPdf'])
        ->name('reports.export.pdf-download');
+       
+// Listar backups (NOTA: NO usan prefijo 'admin.', usan nombres simples)
+Route::get('backups', [BackupController::class, 'index'])->name('backups.index');
+Route::post('backups/create', [BackupController::class, 'create'])->name('backups.create');
+Route::post('backups/run', [BackupController::class, 'run'])->name('backups.run');
+Route::post('backups/clean', [BackupController::class, 'clean'])->name('backups.clean');
+Route::post('backups/{id}/restore', [BackupController::class, 'restore'])->name('backups.restore');
+Route::get('backups/restore-log', [BackupController::class, 'restoreLog'])->name('backups.restore-log');
+Route::get('backups/{filename}/download', [BackupController::class, 'download'])->name('backups.download');
+Route::delete('backups/{id}', [BackupController::class, 'destroy'])->name('backups.destroy');

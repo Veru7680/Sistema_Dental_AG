@@ -87,5 +87,13 @@
         'active' => 'admin.reports.*', 
         
     ],
+
+     [
+    'type' => 'link',
+    'title' => 'Copias Seguridad',
+    'icon' => 'fa-solid fa-database', // Icono más apropiado para backups
+    'route' => 'admin.backups.index', 
+    'active' => 'admin.backups.*', 
+],
     
 ];
